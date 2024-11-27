@@ -1,0 +1,62 @@
+﻿@using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio
+
+@model CreateDentalStudioCommand;
+
+<h1>Create Dental Studio</h1>
+
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form action="/DentalStudio/Create" method="post">
+			<!-- Name -->
+			<div class="form-group mb-3">
+				<label class="control-label" asp-for="Name">Name</label>
+				<input class="form-control" type="text" asp-for="Name">
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+			<!-- Description -->
+			<div class="form-group mb-3">
+				<label class="control-label" asp-for="Description">Description</label>
+				<input class="form-control" type="text" asp-for="Description">
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+			<!-- ContactDetails.City -->
+			<div class="form-group mb-3">
+				<label class="control-label" asp-for="City">City</label>
+				<input class="form-control" type="text" asp-for="City">
+			</div>
+			<!-- ContactDetails.Street -->
+			<div class="form-group mb-3">
+				<label class="control-label" asp-for="Street">Street</label>
+				<input class="form-control" type="text" asp-for="Street">
+			</div>
+			<!-- ContactDetails.PostalCode -->
+			<div class="form-group mb-3">
+				<label class="control-label" asp-for="PostalCode">PostalCode</label>
+				<input class="form-control" type="text" asp-for="PostalCode">
+			</div>
+			<!-- ContactDetails.PhoneNumber -->
+			<div class="form-group mb-3">
+				<label class="control-label" asp-for="PhoneNumber">PhoneNumber</label>
+				<input class="form-control" type="text" asp-for="PhoneNumber">
+				<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+			</div>
+			<!-- ContactDetails.Link -->
+			<div class="form-group mb-3">
+				<label class="control-label" asp-for="Link">Link</label>
+				<input class="form-control" type="text" asp-for="Link">
+			</div>
+			<!-- Create BTN-->
+			<div class="form-group mb-3">
+				<input type="submit" value="Create" class="btn btn-primary">
+			</div>
+
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_validationScriptsPartial");
+	}
+}

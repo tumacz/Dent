@@ -1,0 +1,49 @@
+﻿@model TheApp.Application.DataTransferObjects.DentalStudioDTO
+@{
+    ViewData["Title"] = "Details";
+}
+<h1>@Model.Name Details</h1>
+<div>
+    <h4>DentalStudioDTO</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Street)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Street)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PostalCode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PostalCode)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if(Model.IsEditable)
+    {
+            <a class="btn btn-outline-secondary" asp-controller="DentalStudio" asp-action="Edit" asp-route-encodedName="@Model.EncodedName">Edit</a>
+    }
+    <a asp-action="Index">Back to List</a>
+</div>
+
