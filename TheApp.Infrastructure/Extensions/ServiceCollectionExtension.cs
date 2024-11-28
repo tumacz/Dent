@@ -17,8 +17,10 @@ namespace TheApp.Infrastructure.Extensions
                            configuration.GetConnectionString("TheAppCS")));
 
             services.AddDefaultIdentity<IdentityUser>(options => { options.Stores.MaxLengthForKeys = 450; })
-                //.AddRoles<IdentityRole>().
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<TheAppDbContext>();
+
+            services.AddScoped<AdminSeeder>();
 
             services.AddScoped<DentalStudioSeeder>();
 

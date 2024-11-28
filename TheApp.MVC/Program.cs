@@ -18,18 +18,10 @@ var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<DentalStudioSeeder>();
-//var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-//var roles = new[] { "admin", "manager", "menber" };
-//foreach (var role in roles)
-//{
-//    if (!await roleManager.RoleExistsAsync(role))
-//    {
-//        await roleManager.CreateAsync(new IdentityRole(role));
-//    }
-//}
+var admin = scope.ServiceProvider.GetRequiredService<AdminSeeder>();
 
 await seeder.Seed();
-
+await admin.Seed();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
