@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using TheApp.Application.ApplicationUser;
 using TheApp.Application.DataTransferObjects;
+using TheApp.Application.DentalStudioServiceDTO;
 using TheApp.Application.DataTransferObjects.Commands.EditDentalStudio;
 using TheApp.Domain.Entities;
 
@@ -28,7 +29,8 @@ namespace TheApp.Application.Mappings
                 }));
 
             CreateMap<DentalStudio, DentalStudioDTO>()
-                .ForMember(dto => dto.IsEditable, opt => opt.MapFrom(scr => user != null && scr.CreatedById == user.Id))
+                .ForMember(dto => dto.IsEditable, opt => opt.MapFrom(scr => user != null && 
+                (scr.CreatedById == user.Id || user.Roles.Contains("Moderator"))))
                 .ForMember(dto => dto.City, opt => opt.MapFrom(scr => scr.ContactDetails.City))
                 .ForMember(dto => dto.PostalCode, opt => opt.MapFrom(scr => scr.ContactDetails.PostalCode))
                 .ForMember(dto => dto.Street, opt => opt.MapFrom(scr => scr.ContactDetails.Street))
@@ -36,6 +38,8 @@ namespace TheApp.Application.Mappings
                 .ForMember(dto => dto.Link, opt => opt.MapFrom(scr => scr.ContactDetails.Link));
 
             CreateMap<DentalStudioDTO, EditDentalStudioCommand>();
+
+            CreateMap<DentalStudioService, TheApp.Application.DentalStudioServiceDTO.DentalStudioServiceDTO>().ReverseMap();
 		}
     }
 }

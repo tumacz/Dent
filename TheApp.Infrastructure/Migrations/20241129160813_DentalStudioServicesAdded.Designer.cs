@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheApp.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using TheApp.Infrastructure.Persistence;
 namespace TheApp.Infrastructure.Migrations
 {
     [DbContext(typeof(TheAppDbContext))]
-    partial class TheAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241129160813_DentalStudioServicesAdded")]
+    partial class DentalStudioServicesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

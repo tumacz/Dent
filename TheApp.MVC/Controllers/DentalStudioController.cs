@@ -2,12 +2,17 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TheApp.Application.DataTransferObjects;
 using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
 using TheApp.Application.DataTransferObjects.Commands.EditDentalStudio;
 using TheApp.Application.DataTransferObjects.Queries.GetAllDentaStudiosQuery;
 using TheApp.Application.DataTransferObjects.Queries.GetDentalStudioByEncodedName;
+using TheApp.Application.DentalStudioServiceDTO.Commands;
+using TheApp.Application.DentalStudioServiceDTO.Queries;
 using TheApp.Domain.Entities;
+using TheApp.MVC.Extensions;
+using TheApp.MVC.Models;
 
 namespace TheApp.MVC.Controllers
 {
@@ -35,9 +40,13 @@ namespace TheApp.MVC.Controllers
             return View(dentalStudios);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
+            if(!User.IsInRole("Administrator"))
+            {
+                RedirectToAction("NoAccess", "Home");
+            }
             return View();
         }
 
@@ -49,7 +58,11 @@ namespace TheApp.MVC.Controllers
             {
                 return View(command);
             }
+
             await _mediator.Send(command);
+
+            this.SetNotification("success", $"Created Dental Studio: {command.Name}");
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -76,8 +89,33 @@ namespace TheApp.MVC.Controllers
             {
                 return View(command);
             }
+
+
             await _mediator.Send(command);
+
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [Authorize(Roles ="Moderator")]
+        [Route("DentalStudio/DentalStudioService")]
+        public async Task<IActionResult> CreateDentalStudioService(CreateDentalStudioServiceCommand command)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _mediator.Send(command);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("DentalStudio/{encodedName}/DentalStudioService")]
+        public async Task<IActionResult> GetDentalStudioServices(string encodedName)
+        {
+            var data = await _mediator.Send(new GetDentalStudioServiceForEncodedNameQuery(encodedName) { EncodedName = encodedName});
+            return Ok(data);
         }
     }
 }

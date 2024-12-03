@@ -19,10 +19,15 @@ namespace TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio
         }
         public async Task Handle(CreateDentalStudioCommand request, CancellationToken cancellationToken)
         {
+            var currentUser = _userContext.GetCurrentUser();
+            if (currentUser == null || !currentUser.IsInRole("Administrator"))
+            {
+                return;
+            }
             var dentalStudio = _mapper.Map<DentalStudio>(request);
             dentalStudio.EncodeName();
 
-            dentalStudio.CreatedById = _userContext.GetCurrentUser().Id;
+            dentalStudio.CreatedById = currentUser.Id;
             await _repository.Create(dentalStudio);
         }
     }

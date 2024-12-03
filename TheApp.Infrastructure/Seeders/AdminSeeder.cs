@@ -17,23 +17,23 @@ namespace TheApp.Infrastructure.Seeders
         public async Task Seed()
         {
 
-            var roleExists = await _roleManager.RoleExistsAsync("Administrator");
+            var roleExists = await _roleManager.RoleExistsAsync("Moderator");
 
             if (!roleExists)
             {
-                await _roleManager.CreateAsync(new IdentityRole("Administrator"));
+                await _roleManager.CreateAsync(new IdentityRole("Moderator"));
             }
 
-            var adminUser = await _userManager.FindByNameAsync("admin@admin.com");
+            var adminUser = await _userManager.FindByNameAsync("moderator@admin.com");
 
             if (adminUser == null)
             {
-                adminUser = new IdentityUser { UserName = "admin@admin.com", Email = "admin@admin.com" };
+                adminUser = new IdentityUser { UserName = "moderator@admin.com", Email = "moderator@admin.com" };
                 var result = await _userManager.CreateAsync(adminUser, "Pa$$word1");
         
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(adminUser, "Administrator");
+                    await _userManager.AddToRoleAsync(adminUser, "Moderator");
                 }
             }
         }

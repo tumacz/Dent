@@ -21,6 +21,8 @@ namespace TheApp.Domain.Entities
 
         public string EncodedName { get; private set; } = default!;
 
+        public List<DentalStudioService> Sevices { get; set; } = new();
+
         public void EncodeName() => EncodedName = Name.ToLower().Replace(" ", "-");
     }
 }

@@ -28,7 +28,7 @@ namespace TheApp.Application.DataTransferObjects.Commands.EditDentalStudio
 
             var dentalStudio = await _repository.GetByEncodedName(request.EncodedName!);
 
-            var isEditable = user != null && dentalStudio.CreatedById == user.Id;
+            var isEditable = user != null && dentalStudio.CreatedById == user.Id || user != null && user.IsInRole("Moderator");
             if (!isEditable)
             {
                 return;

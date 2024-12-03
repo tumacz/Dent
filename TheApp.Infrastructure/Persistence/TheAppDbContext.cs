@@ -9,6 +9,7 @@ namespace TheApp.Infrastructure.Persistence
         public TheAppDbContext(DbContextOptions<TheAppDbContext> options) : base(options) { }
 
         public DbSet<DentalStudio> DentalStudios { get; set; }
+        public DbSet<DentalStudioService> Sevices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -16,6 +17,10 @@ namespace TheApp.Infrastructure.Persistence
 
             modelBuilder.Entity<DentalStudio>()
                 .OwnsOne(c => c.ContactDetails);
+            modelBuilder.Entity<DentalStudio>()
+                .HasMany(c => c.Sevices)
+                .WithOne(c => c.DentalStudio)
+                .HasForeignKey(c => c.DentalStudioId);
         }
     }
 }
