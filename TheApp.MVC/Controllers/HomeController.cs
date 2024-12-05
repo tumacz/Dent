@@ -6,12 +6,12 @@ namespace TheApp.MVC.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    //private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
+    //public HomeController(ILogger<HomeController> logger)
+    //
+        //_logger = logger;
+    //}
 
     public IActionResult Index()
     {
@@ -27,13 +27,13 @@ public class HomeController : Controller
     {
         var infoModel = new List<InfoModel>()
         {
-            new InfoModel()
+            new()
             {
                 Title = "Info Model Title",
                 Description = "Info Model Description",
-                Tags = ["#First Tag", "#Second Tag"]
+                Tags = ["#dental", "#studio", "app"]
             },
-            new InfoModel()
+            new()
             {
                 Title = "Info Model Test",
                 Description = "Info Model Description Two",
@@ -48,12 +48,12 @@ public class HomeController : Controller
     {
         var model = new List<Person>()
         {
-            new Person()
+            new()
             {
                 FristNmae = "macio",
                 LastName = "haki"
             },
-            new Person()
+            new()
             {
                 FristNmae ="basix",
                 LastName = "patix"
