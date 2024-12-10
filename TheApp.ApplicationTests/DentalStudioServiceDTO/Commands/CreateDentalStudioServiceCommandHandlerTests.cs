@@ -1,24 +1,19 @@
 ﻿using Xunit;
-using TheApp.Application.DentalStudioServiceDTO.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheApp.Application.ApplicationUser;
-using Microsoft.AspNetCore.Http;
 using Moq;
-using System.Security.Claims;
-using TheApp.Domain.Entities;
 using TheApp.Domain.Interfaces;
-using MediatR;
 
 namespace TheApp.Application.DentalStudioServiceDTO.Commands.Tests
 {
     public class CreateDentalStudioServiceCommandHandlerTests
     {
-        [Fact()]
-        public async Task Handle_CreatesCarWorkshopService_WhenUserIsAuthorized()
+        [Theory]
+        [InlineData("1", "test@test.com", new[] { "User" }, true)]   // Authorized user
+        [InlineData("2", "test@test.com", new[] { "Moderator" }, true)]  // Authorized user (Moderator)
+        [InlineData("2", "test@test.com", new[] { "Admin" }, false)]  // Unauthorized user
+        [InlineData(null, null, null, false)]  // Not authenticated user
+        public async Task Handle_CreatesDentalStudioService_WhenUserIsAuthorizedOrNot(
+            string userId, string email, string[] roles, bool shouldCreate)
         {
             // arrange
             var dentalStudio = new Domain.Entities.DentalStudio()
@@ -35,122 +30,28 @@ namespace TheApp.Application.DentalStudioServiceDTO.Commands.Tests
 
             var userContextMock = new Mock<IUserContext>();
             userContextMock.Setup(c => c.GetCurrentUser())
-                .Returns(new CurrentUser("1", "test@test.com", new[] { "User" }));
+                .Returns(userId == null ? null : new CurrentUser(userId, email, roles));
 
             var DentaStudioRepositoryMock = new Mock<IDentalStudioRepository>();
             DentaStudioRepositoryMock.Setup(c => c.GetByEncodedName(command.DentalStudioEncodedName))
                 .ReturnsAsync(dentalStudio);
 
             var dentalStudioServiceRepositoryMock = new Mock<IDentalStudioServiceRepository>();
+
             var handler = new CreateDentalStudioServiceCommandHandler(userContextMock.Object, DentaStudioRepositoryMock.Object,
                 dentalStudioServiceRepositoryMock.Object);
 
             // act
             await handler.Handle(command, CancellationToken.None);
             // assert
-            dentalStudioServiceRepositoryMock.Verify(m => m.Create(It.IsAny<Domain.Entities.DentalStudioService>()), Times.Once);
-        }
-
-        [Fact()]
-        public async Task Handle_CreatesCarWorkshopService_WhenUserIsModerator()
-        {
-            // arrange
-            var dentalStudio = new Domain.Entities.DentalStudio()
+            if (shouldCreate)
             {
-                Id = 2,
-                CreatedById = "2"
-            };
-            var command = new CreateDentalStudioServiceCommand()
+                dentalStudioServiceRepositoryMock.Verify(m => m.Create(It.IsAny<Domain.Entities.DentalStudioService>()), Times.Once);
+            }
+            else
             {
-                Cost = "100 PLN",
-                Description = "Service description",
-                DentalStudioEncodedName = "workshop1"
-            };
-
-            var userContextMock = new Mock<IUserContext>();
-            userContextMock.Setup(c => c.GetCurrentUser())
-                .Returns(new CurrentUser("1", "test@test.com", new[] { "Moderator" }));
-
-            var DentaStudioRepositoryMock = new Mock<IDentalStudioRepository>();
-            DentaStudioRepositoryMock.Setup(c => c.GetByEncodedName(command.DentalStudioEncodedName))
-                .ReturnsAsync(dentalStudio);
-
-            var dentalStudioServiceRepositoryMock = new Mock<IDentalStudioServiceRepository>();
-            var handler = new CreateDentalStudioServiceCommandHandler(userContextMock.Object, DentaStudioRepositoryMock.Object,
-                dentalStudioServiceRepositoryMock.Object);
-
-            // act
-            await handler.Handle(command, CancellationToken.None);
-            // assert
-            dentalStudioServiceRepositoryMock.Verify(m => m.Create(It.IsAny<Domain.Entities.DentalStudioService>()), Times.Once);
-        }
-
-        [Fact()]
-        public async Task Handle_DoNotCreatesCarWorkshopService_WhenUserIsNotAuthorized()
-        {
-            // arrange
-            var dentalStudio = new Domain.Entities.DentalStudio()
-            {
-                Id = 2,
-                CreatedById = "2"
-            };
-            var command = new CreateDentalStudioServiceCommand()
-            {
-                Cost = "100 PLN",
-                Description = "Service description",
-                DentalStudioEncodedName = "workshop1"
-            };
-
-            var userContextMock = new Mock<IUserContext>();
-            userContextMock.Setup(c => c.GetCurrentUser())
-                .Returns(new CurrentUser("1", "test@test.com", new[] { "Admin" }));
-
-            var DentaStudioRepositoryMock = new Mock<IDentalStudioRepository>();
-            DentaStudioRepositoryMock.Setup(c => c.GetByEncodedName(command.DentalStudioEncodedName))
-                .ReturnsAsync(dentalStudio);
-
-            var dentalStudioServiceRepositoryMock = new Mock<IDentalStudioServiceRepository>();
-            var handler = new CreateDentalStudioServiceCommandHandler(userContextMock.Object, DentaStudioRepositoryMock.Object,
-                dentalStudioServiceRepositoryMock.Object);
-
-            // act
-            await handler.Handle(command, CancellationToken.None);
-            // assert
-            dentalStudioServiceRepositoryMock.Verify(m => m.Create(It.IsAny<Domain.Entities.DentalStudioService>()), Times.Never);
-        }
-
-        [Fact()]
-        public async Task Handle_DoNotCreatesCarWorkshopService_WhenUserIsNotAuthenticated()
-        {
-            // arrange
-            var dentalStudio = new Domain.Entities.DentalStudio()
-            {
-                Id = 2,
-                CreatedById = "2"
-            };
-            var command = new CreateDentalStudioServiceCommand()
-            {
-                Cost = "100 PLN",
-                Description = "Service description",
-                DentalStudioEncodedName = "workshop1"
-            };
-
-            var userContextMock = new Mock<IUserContext>();
-            userContextMock.Setup(c => c.GetCurrentUser())
-                .Returns((CurrentUser?)null);
-
-            var DentaStudioRepositoryMock = new Mock<IDentalStudioRepository>();
-            DentaStudioRepositoryMock.Setup(c => c.GetByEncodedName(command.DentalStudioEncodedName))
-                .ReturnsAsync(dentalStudio);
-
-            var dentalStudioServiceRepositoryMock = new Mock<IDentalStudioServiceRepository>();
-            var handler = new CreateDentalStudioServiceCommandHandler(userContextMock.Object, DentaStudioRepositoryMock.Object,
-                dentalStudioServiceRepositoryMock.Object);
-
-            // act
-            await handler.Handle(command, CancellationToken.None);
-            // assert
-            dentalStudioServiceRepositoryMock.Verify(m => m.Create(It.IsAny<Domain.Entities.DentalStudioService>()), Times.Never);
+                dentalStudioServiceRepositoryMock.Verify(m => m.Create(It.IsAny<Domain.Entities.DentalStudioService>()), Times.Never);
+            }
         }
     }
 }

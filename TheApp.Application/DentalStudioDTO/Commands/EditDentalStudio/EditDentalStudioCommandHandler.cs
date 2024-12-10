@@ -1,12 +1,5 @@
-﻿using AutoMapper;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 using TheApp.Application.ApplicationUser;
-using TheApp.Application.DataTransferObjects.Queries.GetDentalStudioByEncodedName;
 using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.DataTransferObjects.Commands.EditDentalStudio
@@ -27,7 +20,7 @@ namespace TheApp.Application.DataTransferObjects.Commands.EditDentalStudio
             var user = _userContext.GetCurrentUser();
 
             var dentalStudio = await _repository.GetByEncodedName(request.EncodedName!);
-
+            
             var isEditable = user != null && dentalStudio.CreatedById == user.Id || user != null && user.IsInRole("Moderator");
             if (!isEditable)
             {

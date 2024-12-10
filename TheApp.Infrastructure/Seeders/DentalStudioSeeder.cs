@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace TheApp.Infrastructure.Seeders
 {
@@ -22,6 +23,9 @@ namespace TheApp.Infrastructure.Seeders
             {
                 return;
             }
+
+            _dbContext.Database.Migrate();
+
             if (_dbContext.DentalStudios.Any())
             {
                 return;

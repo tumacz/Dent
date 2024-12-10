@@ -15,6 +15,5 @@ namespace TheApp.Application.DataTransferObjects.Queries.GetDentalStudioByEncode
         {
             EncodedName = encodedName;
         }
-
     }
 }

@@ -45,4 +45,5 @@ app.MapRazorPages();
 
 app.Run();
 
+//tests require partial
 public partial class Program { };

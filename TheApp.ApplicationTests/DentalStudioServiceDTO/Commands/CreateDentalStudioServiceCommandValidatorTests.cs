@@ -29,6 +29,7 @@ namespace TheApp.Application.DentalStudioServiceDTO.Commands.Tests
             result.ShouldNotHaveAnyValidationErrors();
         }
 
+        [Fact]
         public void Validate_WithInvalidCommand_ShouldHaveValidationError()
         {
             //arange
