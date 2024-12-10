@@ -1,4 +1,8 @@
 ﻿@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 @{
     var action = ViewContext.RouteData.Values["Action"]?.ToString();
     var controller = ViewContext.RouteData.Values["Controller"]?.ToString();
@@ -40,6 +44,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark @(controller == "DentalStudio" && action == "Index" ? "active" : "")" asp-area="" asp-controller="DentalStudio" asp-action="Index">Dental Studios</a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(controller == "IdentityManager" && action == "Index" ? "active" : "")" asp-area="" asp-controller="IdentityManager" asp-action="Index">Identity Manager</a>
+                        </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial"/>
                 </div>

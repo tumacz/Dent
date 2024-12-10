@@ -12,6 +12,7 @@ using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
 using System.Reflection;
 using TheApp.Application.ApplicationUser;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace TheApp.Application.Extensions
 {
@@ -26,7 +27,9 @@ namespace TheApp.Application.Extensions
             {
                 var scope = provider.CreateScope();
                 var userContext = scope.ServiceProvider.GetRequiredService<IUserContext>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
                 cfg.AddProfile(new DentalStudioMappingProfile(userContext));
+                cfg.AddProfile(new UserDtoMappingProfile(userManager));
             }).CreateMapper()
             );
                 
