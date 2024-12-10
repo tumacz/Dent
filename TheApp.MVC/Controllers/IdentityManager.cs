@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TheApp.Application.DataTransferObjects.Queries.GetAllDentaStudiosQuery;
 using TheApp.Application.UsersDTO.Queries;
 
 namespace TheApp.MVC.Controllers
@@ -23,7 +22,6 @@ namespace TheApp.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var users = await _mediator.Send(new GetAllUsersQuery());
-            
             return View(users);
         }
     }

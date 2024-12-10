@@ -13,6 +13,12 @@
             <div class="card-body">
                 <h5 class="card-title">@item.Name</h5>
                 <h6 class="card-subtitle mb-2 text-muted">@item.Email</h6>
+                <ul>
+                    @foreach (var role in item.Roles)
+                    {
+                        <li>@role</li>
+                    }
+                </ul>
             </div>
         </div>
     }
