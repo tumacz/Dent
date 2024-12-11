@@ -9,7 +9,7 @@ using TheApp.Application.DataTransferObjects;
 using AutoMapper;
 using TheApp.Domain.Interfaces;
 
-namespace TheApp.Application.UsersDTO.Queries
+namespace TheApp.Application.UsersDTO.Queries.GetAllUsers
 {
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<UserDTO>>
     {

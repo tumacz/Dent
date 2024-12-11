@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using TheApp.Application.UsersDTO;
+using TheApp.Application.UsersDTO.Commands.EditUser;
 using TheApp.Domain.Entities;
 
 public class UserDtoMappingProfile : Profile
@@ -16,5 +17,7 @@ public class UserDtoMappingProfile : Profile
             .ForMember(dto => dto.Name, opt => opt.MapFrom(src => src.UserName))
             .ForMember(dto => dto.Email, opt => opt.MapFrom(src => src.Email))
             .ForMember(dto => dto.Roles, opt => opt.MapFrom(src => src.Roles));
+
+        CreateMap<UserDTO, EditUserCommand>();
     }
 }

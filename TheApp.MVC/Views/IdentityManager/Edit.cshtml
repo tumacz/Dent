@@ -1,0 +1,73 @@
+﻿@using TheApp.Application.UsersDTO.Commands;
+@model TheApp.Application.UsersDTO.Commands.EditUser.EditUserCommand
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit @Model.Name</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group m-3">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group m-3">
+                <label>Roles</label>
+                <div id="roles-container">
+                    @for (int i = 0; i < Model.Roles.Count; i++)
+
+                    {
+                        <div class="input-group mb-2 role-entry">
+                            <input asp-for="Roles[i]" class="form-control" />
+                            <button type="button" class="btn btn-danger btn-remove-role">Remove</button>
+                        </div>
+                    }
+                </div>
+                <button type="button" id="btn-add-role" class="btn btn-success">Add Role</button>
+                <span asp-validation-for="Roles" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="m-3">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById('btn-add-role').addEventListener('click', function () {
+            const container = document.getElementById('roles-container');
+            const roleEntry = document.createElement('div');
+            roleEntry.className = 'input-group mb-2 role-entry';
+
+            roleEntry.innerHTML = `
+                        <input name="Roles" class="form-control" />
+                        <button type="button" class="btn btn-danger btn-remove-role">Remove</button>
+                    `;
+
+            container.appendChild(roleEntry);
+        });
+
+        document.getElementById('roles-container').addEventListener('click', function (event) {
+            if (event.target.classList.contains('btn-remove-role')) {
+                event.target.closest('.role-entry').remove();
+            }
+        });
+    </script>
+}

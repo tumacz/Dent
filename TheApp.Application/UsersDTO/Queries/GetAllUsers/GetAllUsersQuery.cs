@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheApp.Application.UsersDTO.Queries
+namespace TheApp.Application.UsersDTO.Queries.GetAllUsers
 {
     public class GetAllUsersQuery : IRequest<IEnumerable<UserDTO>>
     {
