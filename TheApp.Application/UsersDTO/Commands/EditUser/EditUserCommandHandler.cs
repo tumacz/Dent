@@ -21,18 +21,37 @@ namespace TheApp.Application.UsersDTO.Commands.EditUser
         public async Task Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
             var userContext = _userContext.GetCurrentUser();
+            bool AdminRole = false;
+
+            if (userContext != null)
+            {
+                AdminRole = userContext.IsInRole("Administrator");
+            }
+
+            //find by id
             var user = await _repository.GetUserByName(request.Name);
-            if (userContext == null || !userContext.IsInRole("Administrator"))
+
+            if (user == null)
+            {
+                throw new InvalidOperationException($"No user: {request.Name} has not beed found");
+            }
+
+            if (userContext == null)
             {
                 throw new InvalidOperationException("You cannot edit while you are not authenticated nor authorized.");
             }
 
-            if (userContext.Roles.Contains("Administrator") && userContext.Id == request.Id && !request.Roles.Contains("Administrator"))
+            if (!AdminRole)
+            {
+                throw new InvalidOperationException("You cannot edit while you are not authorized.");
+            }
+
+            if (userContext.Id == request.Id && userContext.IsInRole("Administrator") && !request.Roles.Contains("Administrator"))
             {
                 throw new InvalidOperationException("You cannot remove your own Administrator role.");
             }
 
-            user!.Roles = request.Roles;
+            user.Roles = request.Roles;
             user.Email = request.Email;
             await _repository.Commit(user);
         }

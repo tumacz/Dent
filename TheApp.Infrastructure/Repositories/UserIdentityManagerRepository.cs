@@ -23,7 +23,6 @@ namespace TheApp.Infrastructure.Repositories
             }
 
             identityUser.Email = user.Email;
-            identityUser.UserName = user.UserName;
 
             var updateResult = await _userManager.UpdateAsync(identityUser);
             if (!updateResult.Succeeded)
@@ -57,6 +56,7 @@ namespace TheApp.Infrastructure.Repositories
             }
         }
 
+        //divide
         public async Task<IEnumerable<UserWithRoles>> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -87,6 +87,7 @@ namespace TheApp.Infrastructure.Repositories
                 return null;
             }
             var roles = await _userManager.GetRolesAsync(user);
+
             var userWithRoles = new UserWithRoles
             {
                 UserName = user.UserName,

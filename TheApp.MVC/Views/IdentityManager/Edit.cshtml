@@ -13,6 +13,8 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <input type="hidden" asp-for="Id" />
+
             <div class="form-group m-3">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
@@ -47,27 +49,6 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/IdentityManager/Edit.js"></script>
     }
-    <script>
-        document.getElementById('btn-add-role').addEventListener('click', function () {
-            const container = document.getElementById('roles-container');
-            const roleEntry = document.createElement('div');
-            roleEntry.className = 'input-group mb-2 role-entry';
-
-            roleEntry.innerHTML = `
-                        <input name="Roles" class="form-control" />
-                        <button type="button" class="btn btn-danger btn-remove-role">Remove</button>
-                    `;
-
-            container.appendChild(roleEntry);
-        });
-
-        document.getElementById('roles-container').addEventListener('click', function (event) {
-            if (event.target.classList.contains('btn-remove-role')) {
-                event.target.closest('.role-entry').remove();
-            }
-        });
-    </script>
-}
