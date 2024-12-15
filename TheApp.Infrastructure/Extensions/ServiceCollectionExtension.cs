@@ -26,6 +26,7 @@ namespace TheApp.Infrastructure.Extensions
 
             services.AddScoped<IDentalStudioRepository, DentalStudioRepository>();
             services.AddScoped<IDentalStudioServiceRepository, DentalStudioServiceRepository>();
+            services.AddScoped<IAppUserRepository, AppUserRepository>();
         }
     }
 }

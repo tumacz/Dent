@@ -2,17 +2,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using TheApp.Application.DataTransferObjects;
 using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
 using TheApp.Application.DataTransferObjects.Commands.EditDentalStudio;
 using TheApp.Application.DataTransferObjects.Queries.GetAllDentaStudiosQuery;
 using TheApp.Application.DataTransferObjects.Queries.GetDentalStudioByEncodedName;
 using TheApp.Application.DentalStudioServiceDTO.Commands;
 using TheApp.Application.DentalStudioServiceDTO.Queries;
-using TheApp.Domain.Entities;
 using TheApp.MVC.Extensions;
-using TheApp.MVC.Models;
 
 namespace TheApp.MVC.Controllers
 {

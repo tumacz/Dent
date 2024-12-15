@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TheApp.Application.ApplicationUser.UserDTO.AppUserDTO>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Users</h1>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="card m-3 user-card" style="width: 18rem;" data-user-id="@item.Id" data-roles='@Newtonsoft.Json.JsonConvert.SerializeObject(item.Roles)'>
+            <div class="card-body">
+                <h5 class="card-title">@item.UserName</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@item.Email</h6>
+
+                <h3>Roles:</h3>
+                <div class="roles-list"></div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

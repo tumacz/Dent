@@ -28,3 +28,25 @@ const LoadDentalStudioServices = () => {
         }
     })
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const userCards = document.querySelectorAll(".user-card");
+
+    userCards.forEach(card => {
+        const rolesContainer = card.querySelector(".roles-list");
+        const rolesData = card.dataset.roles;
+
+        if (rolesData) {
+            const roles = JSON.parse(rolesData);
+            roles.forEach(role => {
+
+                const roleElement = document.createElement("div");
+                roleElement.className = "role-item";
+                roleElement.textContent = role;
+                rolesContainer.appendChild(roleElement);
+            });
+        } else {
+            rolesContainer.textContent = "No roles assigned.";
+        }
+    });
+});
