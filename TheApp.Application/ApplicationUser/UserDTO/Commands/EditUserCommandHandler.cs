@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Text.Json;
 using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.ApplicationUser.UserDTO.Commands
@@ -15,9 +16,13 @@ namespace TheApp.Application.ApplicationUser.UserDTO.Commands
         public async Task Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
             var userToEdit = await _repository.GetUserById(request.Id);
+            var roles = JsonSerializer.Deserialize<List<string>>(request.Roles[0]);
 
-            await _repository.CommitEmail(userToEdit, request.Email);            
-            await _repository.CommitRoles(userToEdit, request.Roles);
+            await _repository.CommitEmail(userToEdit, request.Email);
+            if (roles != null) 
+            {
+                await _repository.CommitRoles(userToEdit, roles);
+            }
         }
     }
 }

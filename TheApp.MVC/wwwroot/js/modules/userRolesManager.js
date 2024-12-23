@@ -1,6 +1,38 @@
 ﻿const UserRolesManager = {
     rolesList: [],
 
+    loadRoles: () => {
+        console.log("Loading roles...");
+
+        // Przygotowanie kontenera na role
+        const rolesContainer = document.getElementById('roles-container');
+        if (!rolesContainer) {
+            console.error("Roles container not found!");
+            return;
+        }
+
+        // Czyszczenie kontenera przed dodaniem nowych ról
+        rolesContainer.innerHTML = "";
+
+        // Na sztywno ustalamy rolę "test"
+        const roles = ["test"];
+
+        // Dodanie ról do kontenera
+        roles.forEach((role, index) => {
+            const roleEntry = document.createElement('div');
+            roleEntry.className = 'input-group mb-2 role-entry';
+
+            // Wstawienie HTML dla każdej roli
+            roleEntry.innerHTML = `
+            <input name="Roles[${index}]" class="form-control" value="${role}" />
+            <button type="button" class="btn btn-danger btn-remove-role">Remove</button>
+        `;
+
+            // Dodanie nowego elementu do kontenera
+            rolesContainer.appendChild(roleEntry);
+        });
+    },
+
     fillEditModal: (userId, userName, userEmail, userRoles) => {
         console.log("Filling modal with data:");
         console.log("User ID:", userId);

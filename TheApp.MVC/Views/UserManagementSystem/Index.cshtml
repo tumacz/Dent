@@ -17,7 +17,6 @@
                 <h6 class="card-subtitle mb-2 text-muted">@item.Id</h6>
                 <h5>Roles:</h5>
                 <div class="roles-list"></div>
-@*                 <h6 class="card-subtitle mb-2 text-muted">@item.Email</h6> *@
                 <div>
                     <partial name="_EditUserRoles" model="new EditUserCommand(){Id = item.Id, UserName = item.UserName, Email = item.Email, Roles = item.Roles}" />
                 </div>
@@ -30,5 +29,25 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script src="~/js/modules/userRolesManager.js"></script>
     <script src="~/js/AppUserManager/Details.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userCards = document.querySelectorAll('.user-card');
+            userCards.forEach(function (card) {
+                const roles = JSON.parse(card.getAttribute('data-roles'));
+                if (roles && roles.length > 0) {
+                    const rolesContainer = card.querySelector('.roles-list');
+                    rolesContainer.innerHTML = '';
+                    roles.forEach(function (role) {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'list-group-item';
+                        listItem.textContent = role;
+                        rolesContainer.appendChild(listItem);
+                    });
+                }
+            });
+        });
+    </script>
 }
