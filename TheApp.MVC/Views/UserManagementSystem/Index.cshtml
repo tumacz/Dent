@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TheApp.Application.ApplicationUser.UserDTO.AppUserDTO>
+﻿@using TheApp.Application.ApplicationUser.UserDTO.Commands
+@model IEnumerable<TheApp.Application.ApplicationUser.UserDTO.AppUserDTO>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,13 +10,17 @@
 <div class="row">
     @foreach (var item in Model)
     {
-        <div class="card m-3 user-card" style="width: 18rem;" data-user-id="@item.Id" data-roles='@Newtonsoft.Json.JsonConvert.SerializeObject(item.Roles)'>
+        <div class="card m-3 user-card" style="width: 18rem;" data-user-id="@item.Id" data-username="@item.UserName" data-email="@item.Email" data-roles='@Newtonsoft.Json.JsonConvert.SerializeObject(item.Roles)'>
             <div class="card-body">
                 <h5 class="card-title">@item.UserName</h5>
                 <h6 class="card-subtitle mb-2 text-muted">@item.Email</h6>
-
-                <h3>Roles:</h3>
+                <h6 class="card-subtitle mb-2 text-muted">@item.Id</h6>
+                <h5>Roles:</h5>
                 <div class="roles-list"></div>
+@*                 <h6 class="card-subtitle mb-2 text-muted">@item.Email</h6> *@
+                <div>
+                    <partial name="_EditUserRoles" model="new EditUserCommand(){Id = item.Id, UserName = item.UserName, Email = item.Email, Roles = item.Roles}" />
+                </div>
             </div>
         </div>
     }
@@ -25,4 +30,5 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="~/js/AppUserManager/Details.js"></script>
 }

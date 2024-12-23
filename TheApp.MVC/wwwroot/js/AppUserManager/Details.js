@@ -1,3 +1,5 @@
 ﻿$(document).ready(function () {
-    LoadUserRoles();
+    console.log("JavaScript loaded");
+
+    UserRolesManager.loadRoles();
 });

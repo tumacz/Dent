@@ -7,12 +7,10 @@ namespace TheApp.Application.ApplicationUser.UserDTO.Queries
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<AppUserDTO>>
     {
         private readonly IAppUserRepository _userRepository;
-        private readonly IMapper _mapper;
 
-        public GetAllUsersQueryHandler(IAppUserRepository userRepository, IMapper mapper)
+        public GetAllUsersQueryHandler(IAppUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<AppUserDTO>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
@@ -20,10 +18,12 @@ namespace TheApp.Application.ApplicationUser.UserDTO.Queries
             var users = await _userRepository.GetAllUsers();
             var usersWithRoles = new List<AppUserDTO>();
 
+            var availableRoles = await _userRepository.GetAvailableRoles();
+
             foreach (var user in users)
             {
                 var roles = await _userRepository.GetRolesForUser(user);
-                usersWithRoles.Add(new AppUserDTO(user.Id, user.UserName, user.Email, roles.ToList()));
+                usersWithRoles.Add(new AppUserDTO() { Id = user.Id, UserName = user.UserName, Email = user.Email, Roles = roles.ToList(), AvailableRoles = availableRoles.ToList() });
             }
 
             return usersWithRoles;

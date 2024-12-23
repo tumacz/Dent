@@ -17,8 +17,4 @@
     <ProjectReference Include="..\TheApp.Domain\TheApp.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ApplicationUser\UserDTO\Commands\" />
-  </ItemGroup>
-
 </Project>
