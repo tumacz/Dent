@@ -1,76 +1,82 @@
 ﻿const UserRolesManager = {
-    rolesList: [],
+    rolesList: [], // Current roles
+    availableRolesList: [], // Available roles
 
     renderRoles: () => {
-        // Renders the roles in the roles container by creating input fields and remove buttons for each role.
         const rolesContainer = document.getElementById('roles-container');
-        rolesContainer.innerHTML = "";
+        const availableRolesContainer = document.getElementById('available-roles-container');
 
-        UserRolesManager.rolesList.forEach((role, index) => {
-            const roleEntry = document.createElement('div');
-            roleEntry.className = 'input-group mb-2 role-entry';
+        // Clear both containers
+        rolesContainer.innerHTML = "";
+        availableRolesContainer.innerHTML = "";
+
+        // Render current roles
+        UserRolesManager.rolesList.forEach((role) => {
+            const roleEntry = document.createElement('span');
+            roleEntry.className = 'role-tab d-inline-flex align-items-center bg-danger text-white rounded px-3 py-2 me-2 mb-2';
+            roleEntry.dataset.role = role;
 
             roleEntry.innerHTML = `
-                <input name="Roles[${index}]" class="form-control" value="${role}" />
-                <button type="button" class="btn btn-danger btn-remove-role">Remove</button>
+                <span>${role}</span>
+                <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
             `;
+
+            roleEntry.querySelector('.btn-close').addEventListener('click', () => {
+                UserRolesManager.removeRole(role);
+            });
 
             rolesContainer.appendChild(roleEntry);
         });
+
+        // Render available roles
+        UserRolesManager.availableRolesList
+            .filter(role => !UserRolesManager.rolesList.includes(role)) // Exclude roles already assigned
+            .forEach((role) => {
+                const roleEntry = document.createElement('span');
+                roleEntry.className = 'role-tab d-inline-flex align-items-center bg-primary text-white rounded px-3 py-2 me-2 mb-2';
+                roleEntry.dataset.role = role;
+
+                roleEntry.innerHTML = `
+                    <span>${role}</span>
+                <button type="button" class="btn-close btn-close-white ms-2" aria-label="Add"></button>
+                `;
+
+                roleEntry.addEventListener('click', () => {
+                    UserRolesManager.addRole(role);
+                });
+
+                availableRolesContainer.appendChild(roleEntry);
+            });
+
+        // Update the hidden input field with the current roles list
+        UserRolesManager.updateHiddenRolesField();
     },
 
     updateHiddenRolesField: () => {
         // Updates the hidden input field with the serialized roles list to send in the form submission.
-        const roles = document.querySelectorAll('.role-entry input');
-        const rolesArray = Array.from(roles).map(role => role.value);
         const rolesInput = document.querySelector('input[name="Roles"]');
-        rolesInput.value = JSON.stringify(rolesArray);
+        rolesInput.value = JSON.stringify(UserRolesManager.rolesList);
     },
 
-    removeRole: (index) => {
-        // Removes a role from the roles list and re-renders the roles.
-        UserRolesManager.rolesList.splice(index, 1);
-        UserRolesManager.renderRoles();
-    },
-
-    addRole: () => {
-        // Prompts the user for a new role name, adds it to the roles list if valid, and re-renders the roles.
-        const newRole = prompt("Enter new role name:");
-        if (newRole && !UserRolesManager.rolesList.includes(newRole)) {
-            UserRolesManager.rolesList.push(newRole);
+    addRole: (role) => {
+        // Adds a role to the roles list if valid, and re-renders the roles.
+        if (role && !UserRolesManager.rolesList.includes(role)) {
+            UserRolesManager.rolesList.push(role);
             UserRolesManager.renderRoles();
-        } else {
-            alert("Role is invalid or already exists!");
         }
     },
 
-    loadRoles: () => {
-        // Loads a predefined list of roles into the roles container.
-        const rolesContainer = document.getElementById('roles-container');
-        if (!rolesContainer) {
-            console.error("Roles container not found!");
-            return;
+    removeRole: (role) => {
+        // Removes a role from the roles list and re-renders the roles.
+        const roleIndex = UserRolesManager.rolesList.indexOf(role);
+        if (roleIndex > -1) {
+            UserRolesManager.rolesList.splice(roleIndex, 1);
+            UserRolesManager.renderRoles();
         }
+    },
 
-        rolesContainer.innerHTML = "";
-
-        const roles = ["test"];
-
-        roles.forEach((role, index) => {
-            const roleEntry = document.createElement('div');
-            roleEntry.className = 'input-group mb-2 role-entry';
-
-            roleEntry.innerHTML = `
-            <input name="Roles[${index}]" class="form-control" value="${role}" />
-            <button type="button" class="btn btn-danger btn-remove-role">Remove</button>
-        `;
-
-            rolesContainer.appendChild(roleEntry);
-        });
-    },     
-
-    fillEditModal: (userId, userName, userEmail, userRoles) => {
-        // Fills the edit modal fields with the provided user data and initializes the roles list.
+    fillEditModal: (userId, userName, userEmail, userRoles, availableRoles) => {
+        // Fills the edit modal fields with the provided user data and initializes the roles and available roles lists.
         const idField = document.querySelector('#EditUserRolesModal input[name="Id"]');
         const userNameField = document.querySelector('#EditUserRolesModal input[name="UserName"]');
         const emailField = document.querySelector('#EditUserRolesModal input[name="Email"]');
@@ -80,58 +86,35 @@
         emailField.value = userEmail;
 
         UserRolesManager.rolesList = [...userRoles];
+        UserRolesManager.availableRolesList = [...availableRoles];
         UserRolesManager.renderRoles();
     },
 
     initEditButtons: () => {
-        // Initializes event listeners for edit buttons and the "add role" button.
+        // Initializes event listeners for edit buttons.
         const editButtons = document.querySelectorAll('.edit-button');
         editButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Handles the click event for edit buttons by filling the edit modal with user data.
                 const userId = button.dataset.userId;
                 const userName = button.dataset.userName;
                 const userEmail = button.dataset.userEmail;
                 const userRoles = JSON.parse(button.dataset.userRoles);
+                const availableRoles = JSON.parse(button.dataset.availableRoles);
 
-                UserRolesManager.fillEditModal(userId, userName, userEmail, userRoles);
+                UserRolesManager.fillEditModal(userId, userName, userEmail, userRoles, availableRoles);
             });
         });
-
-        const addRoleButton = document.getElementById('add-role-button');
-        if (addRoleButton) {
-            // Handles the click event for the "add role" button.
-            addRoleButton.addEventListener('click', UserRolesManager.addRole);
-        }
     }
 };
 
-// main
+// Main initialization
 document.addEventListener("DOMContentLoaded", () => {
-    // Initializes the application once the DOM content is fully loaded.
     UserRolesManager.initEditButtons();
 
     const form = document.querySelector('#EditUserRolesForm');
     if (form) {
-        // Updates the hidden roles field before form submission.
-        form.addEventListener('submit', (event) => {
+        form.addEventListener('submit', () => {
             UserRolesManager.updateHiddenRolesField();
-            console.log("Roles sent:", document.querySelector('input[name="Roles"]').value);
         });
     }
-
-    document.getElementById('roles-container').addEventListener('click', function (event) {
-        // Handles click events within the roles container, such as removing a role.
-        if (event.target.classList.contains('btn-remove-role')) {
-            const entry = event.target.closest('.role-entry');
-            entry.remove();
-
-            const roles = document.querySelectorAll('.role-entry input');
-            roles.forEach((role, index) => {
-                role.name = `Roles[${index}]`;
-            });
-
-            UserRolesManager.updateHiddenRolesField();
-        }
-    });
 });
