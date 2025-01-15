@@ -30,11 +30,18 @@
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+
                         <label>Roles</label>
                         <div id="roles-container">
                             <!-- Tabliczki z rolami będą generowane przez JS -->
                         </div>
                         <button type="button" id="add-role-button" class="btn btn-secondary mt-2">Add Role</button>
+
+                        @* <label>Available Roles</label>
+                        <div id="available-roles-container">
+                            <!-- Tabliczki z rolami będą generowane przez JS -->
+                        </div> *@
+
                         <!-- Ukryte pole do przesyłania ról w formularzu -->
                         <input type="hidden" name="Roles" id="Roles" />
                     </div>

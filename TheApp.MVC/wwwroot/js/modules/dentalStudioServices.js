@@ -1,4 +1,5 @@
-﻿const DentalStudioServices = {
+﻿//object
+const DentalStudioServices = {
     renderServices: (services, container) => {
         container.empty();
         for (const service of services) {
@@ -13,6 +14,8 @@
         }
     },
 
+
+    //function
     loadServices: () => {
         const container = $("#services");
         const dentalStudioEncodedName = container.data("encodedName");

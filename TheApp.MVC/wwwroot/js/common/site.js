@@ -4,6 +4,6 @@
     }
 
     if (document.querySelectorAll(".user-card").length > 0) {
-        UserRolesManager.init();
+        UserRolesManager.initEditButtons();
     }
 });
