@@ -1,0 +1,59 @@
+﻿@model TheApp.Application.ApplicationUser.UserDTO.Commands.EditUserCommand
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary edit-button"
+        data-bs-toggle="modal" data-bs-target="#EditUserRolesModal"
+        data-user-id="@Model.Id"
+        data-user-name="@Model.UserName"
+        data-user-email="@Model.Email"
+        data-user-roles='@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Roles)'
+        data-available-roles='@Newtonsoft.Json.JsonConvert.SerializeObject(Model.AvailableRoles)'>
+    Edit
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="EditUserRolesModal" tabindex="-1" aria-labelledby="EditUserRolesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="EditUserRoles" method="post" id="EditUserRolesForm">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="EditUserRolesModalLabel">Edit @Model.UserName</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Id" type="hidden" />
+                    <input asp-for="UserName" type="hidden" />
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <label>Roles</label>
+                        <div id="roles-container">
+                            <!-- Tabliczki z rolami będą generowane przez JS -->
+                        </div>
+
+                        <label>Available Roles</label>
+                        <div id="available-roles-container">
+                            <!-- Tabliczki z rolami będą generowane przez JS -->
+                        </div>
+
+                        <!-- Ukryte pole do przesyłania ról w formularzu -->
+                        <input type="hidden" name="Roles" id="Roles" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/modules/userRolesManager.js"></script>
+}

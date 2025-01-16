@@ -1,6 +1,5 @@
 ﻿$(document).ready(function () {
-
-    LoadDentalStudioServices()
+    DentalStudioServices.loadServices();
 
     $("#createDentalStudioServiceModal form").submit(function (event) {
         event.preventDefault();
@@ -9,12 +8,12 @@
             type: $(this).attr('method'),
             data: $(this).serialize(),
             success: function (data) {
-                toastr["success"]("Created dental studio service")
-                LoadDentalStudioServices()
+                toastr["success"]("Created dental studio service");
+                DentalStudioServices.loadServices();
             },
             error: function () {
-                toastr["error"]("Something went wrong")
+                toastr["error"]("Something went wrong");
             }
-        })
+        });
     });
 });

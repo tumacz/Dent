@@ -12,6 +12,7 @@ using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
 using System.Reflection;
 using TheApp.Application.ApplicationUser;
 using AutoMapper;
+using TheApp.Application.ApplicationUser.UserDTO.Commands;
 
 namespace TheApp.Application.Extensions
 {
@@ -31,6 +32,10 @@ namespace TheApp.Application.Extensions
             );
                 
             services.AddValidatorsFromAssemblyContaining<CreateDentalStudioCommandValidator>()
+                .AddFluentValidation()
+                .AddFluentValidationClientsideAdapters();
+
+            services.AddValidatorsFromAssemblyContaining<EditUserCommandValidator>()
                 .AddFluentValidation()
                 .AddFluentValidationClientsideAdapters();
         }

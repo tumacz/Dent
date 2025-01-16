@@ -1,0 +1,42 @@
+﻿@using TheApp.Application.ApplicationUser.UserDTO.Commands
+@model IEnumerable<TheApp.Application.ApplicationUser.UserDTO.AppUserDTO>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Users</h1>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="card m-3 user-card" style="width: 18rem;"
+             data-user-id="@item.Id"
+             data-username="@item.UserName"
+             data-email="@item.Email"
+             data-roles='@Newtonsoft.Json.JsonConvert.SerializeObject(item.Roles)'
+             data-available-roles='@Newtonsoft.Json.JsonConvert.SerializeObject(item.AvailableRoles)'>
+            <div class="card-body">
+                <h5 class="card-title">@item.UserName</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@item.Email</h6>
+                <h6 class="card-subtitle mb-2 text-muted">@item.Id</h6>
+                <h5>Roles:</h5>
+                <div class="roles-list"></div>
+                <div>
+                    <partial name="_EditUserRoles" model="new EditUserCommand(){Id = item.Id, UserName = item.UserName, Email = item.Email, Roles = item.Roles, AvailableRoles = item.AvailableRoles}" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+    <script src="~/js/AppUserManager/Details.js"></script>
+    <script src="~/js/modules/userRolesManager.js"></script>
+}

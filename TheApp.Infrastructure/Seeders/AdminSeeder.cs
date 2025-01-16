@@ -16,7 +16,6 @@ namespace TheApp.Infrastructure.Seeders
 
         public async Task Seed()
         {
-
             var roleExists = await _roleManager.RoleExistsAsync("Moderator");
 
             if (!roleExists)

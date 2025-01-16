@@ -39,7 +39,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=DentalStudio}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 
