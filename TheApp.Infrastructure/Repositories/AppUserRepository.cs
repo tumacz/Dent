@@ -54,13 +54,10 @@ namespace TheApp.Infrastructure.Repositories
 
         public async Task CommitRoles(IdentityUser user, IEnumerable<string> updatedUserRoles)
         {
-            // Pobierz aktualne role użytkownika
             var currentRoles = await _userManager.GetRolesAsync(user) ?? new List<string>();
 
-            // Jeśli updatedUserRoles jest null, przypisz pustą kolekcję
             updatedUserRoles = updatedUserRoles ?? new List<string>();
 
-            // Usuń wszystkie obecne role użytkownika
             if (currentRoles.Any())
             {
                 var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
@@ -70,7 +67,6 @@ namespace TheApp.Infrastructure.Repositories
                 }
             }
 
-            // Dodaj nowe role, jeśli lista nie jest pusta
             if (updatedUserRoles.Any())
             {
                 foreach (var role in updatedUserRoles)

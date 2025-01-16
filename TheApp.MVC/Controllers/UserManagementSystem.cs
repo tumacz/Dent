@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using TheApp.Application.ApplicationUser.UserDTO.Commands;
@@ -13,6 +14,8 @@ namespace TheApp.MVC.Controllers
         {
             _mediator = mediator;
         }
+
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index()
         {
             var users = await _mediator.Send(new GetAllUsersQuery());
@@ -20,6 +23,7 @@ namespace TheApp.MVC.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [Route("UserManagementSystem/UserEdit")]
         public async Task<IActionResult> EditUserRoles(EditUserCommand command)
         {
