@@ -23,6 +23,12 @@ namespace TheApp.MVC.Controllers
             _mapper = mapper;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var dentalStudios = await _mediator.Send(new GetAllDentalStudiosQuery());
+            return View(dentalStudios);
+        }
+
         [Route("DentalStudio/{encodedName}/Details")]
 		public async Task<IActionResult> Details(string encodedName)
 		{
@@ -30,12 +36,8 @@ namespace TheApp.MVC.Controllers
 			return View(details);
 		}
 
-        public async Task<IActionResult> Index()
-        {
-            var dentalStudios = await _mediator.Send(new GetAllDentalStudiosQuery());
-            return View(dentalStudios);
-        }
 
+        #region CreateDentalStudio
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
@@ -61,7 +63,9 @@ namespace TheApp.MVC.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region EditDentalStudio
         [Route("DentalStudio/{encodedName}/Edit")]
         public async Task<IActionResult> Edit(string encodedName)
         {
@@ -86,12 +90,13 @@ namespace TheApp.MVC.Controllers
                 return View(command);
             }
 
-
             await _mediator.Send(command);
 
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region DentalStudioService
         [HttpPost]
         [Authorize(Roles ="Moderator")]
         [Route("DentalStudio/DentalStudioService")]
@@ -113,5 +118,6 @@ namespace TheApp.MVC.Controllers
             var data = await _mediator.Send(new GetDentalStudioServiceForEncodedNameQuery(encodedName) { EncodedName = encodedName});
             return Ok(data);
         }
+        #endregion
     }
 }

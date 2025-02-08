@@ -27,8 +27,8 @@ namespace TheApp.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<DentalStudioService>> GetAll() => await _dbContext.Sevices.ToListAsync();
+        public async Task<IEnumerable<DentalStudioService>> GetAll() => await _dbContext.DentalStudioServices.ToListAsync();
 
-        public async Task<IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName) => await _dbContext.Sevices.Where(c => c.DentalStudio.EncodedName == encodedName).ToListAsync();
+        public async Task<IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName) => await _dbContext.DentalStudioServices.Where(c => c.DentalStudio.EncodedName == encodedName).ToListAsync();
     }
 }

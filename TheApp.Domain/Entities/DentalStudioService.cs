@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TheApp.Domain.Entities
+﻿namespace TheApp.Domain.Entities
 {
     public class DentalStudioService
     {
@@ -14,5 +8,7 @@ namespace TheApp.Domain.Entities
         public int DentalStudioId { get; set; } =default!;
         public DentalStudio DentalStudio { get; set; } = default!;
 
+        public int? DentalServiceId { get; set; } = default!;
+        public DentalService? DentalService { get; set; } = default!;
     }
 }

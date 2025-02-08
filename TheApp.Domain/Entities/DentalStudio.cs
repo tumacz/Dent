@@ -1,10 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TheApp.Domain.Entities
 {
@@ -21,7 +15,7 @@ namespace TheApp.Domain.Entities
 
         public string EncodedName { get; private set; } = default!;
 
-        public List<DentalStudioService> Sevices { get; set; } = new();
+        public List<DentalStudioService> DentalStudioServices { get; set; } = new();
 
         public void EncodeName() => EncodedName = Name.ToLower().Replace(" ", "-");
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheApp.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using TheApp.Infrastructure.Persistence;
 namespace TheApp.Infrastructure.Migrations
 {
     [DbContext(typeof(TheAppDbContext))]
-    partial class TheAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250202155029_RenameSevicesToDentalStudioServices")]
+    partial class RenameSevicesToDentalStudioServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,27 +227,6 @@ namespace TheApp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TheApp.Domain.Entities.DentalService", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DentalServices");
-                });
-
             modelBuilder.Entity("TheApp.Domain.Entities.DentalStudio", b =>
                 {
                     b.Property<int>("Id")
@@ -289,9 +271,6 @@ namespace TheApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DentalServiceId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DentalStudioId")
                         .HasColumnType("int");
 
@@ -300,8 +279,6 @@ namespace TheApp.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DentalServiceId");
 
                     b.HasIndex("DentalStudioId");
 
@@ -401,18 +378,11 @@ namespace TheApp.Infrastructure.Migrations
 
             modelBuilder.Entity("TheApp.Domain.Entities.DentalStudioService", b =>
                 {
-                    b.HasOne("TheApp.Domain.Entities.DentalService", "DentalService")
-                        .WithMany()
-                        .HasForeignKey("DentalServiceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("TheApp.Domain.Entities.DentalStudio", "DentalStudio")
                         .WithMany("DentalStudioServices")
                         .HasForeignKey("DentalStudioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("DentalService");
 
                     b.Navigation("DentalStudio");
                 });

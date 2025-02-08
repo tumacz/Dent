@@ -1,10 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-using TheApp.Domain.Entities;
-using TheApp.Infrastructure.Persistence;
 using TheApp.Infrastructure.Extensions;
 using TheApp.Infrastructure.Seeders;
 using TheApp.Application.Extensions;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
