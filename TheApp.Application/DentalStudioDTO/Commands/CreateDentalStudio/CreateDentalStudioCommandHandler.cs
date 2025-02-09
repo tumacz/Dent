@@ -11,12 +11,14 @@ namespace TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio
         private readonly IDentalStudioRepository _repository;
         private readonly IMapper _mapper;
         private readonly IUserContext _userContext;
+
         public CreateDentalStudioCommandHandler(IMapper mapper, IDentalStudioRepository repository, IUserContext userContext) 
         {
             _mapper = mapper;
             _repository = repository;
             _userContext = userContext;
         }
+
         public async Task Handle(CreateDentalStudioCommand request, CancellationToken cancellationToken)
         {
             var currentUser = _userContext.GetCurrentUser();

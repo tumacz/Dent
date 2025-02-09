@@ -118,6 +118,14 @@ namespace TheApp.MVC.Controllers
             var data = await _mediator.Send(new GetDentalStudioServiceForEncodedNameQuery(encodedName) { EncodedName = encodedName});
             return Ok(data);
         }
+
+        [HttpDelete]
+        [Route("DentalStudio/DentalStudioService/{id}")]
+        public async Task<IActionResult> DeleteDentalStudioService(int id)
+        {
+            await _mediator.Send(new DeleteDentalStudioServiceByIdCommand() { Id = id});
+            return Ok();
+        }
         #endregion
     }
 }

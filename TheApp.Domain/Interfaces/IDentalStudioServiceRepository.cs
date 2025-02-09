@@ -13,5 +13,6 @@ namespace TheApp.Domain.Interfaces
         Task<IEnumerable<DentalStudioService>> GetAll();
         Task Commit();
         Task <IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName);
+        Task DeleteDentalStudioService(int id);
     }
 }

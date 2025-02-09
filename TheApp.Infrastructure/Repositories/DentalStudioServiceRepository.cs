@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheApp.Domain.Entities;
 using TheApp.Domain.Interfaces;
 using TheApp.Infrastructure.Persistence;
@@ -30,5 +25,15 @@ namespace TheApp.Infrastructure.Repositories
         public async Task<IEnumerable<DentalStudioService>> GetAll() => await _dbContext.DentalStudioServices.ToListAsync();
 
         public async Task<IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName) => await _dbContext.DentalStudioServices.Where(c => c.DentalStudio.EncodedName == encodedName).ToListAsync();
+
+        public async Task DeleteDentalStudioService(int id)
+        {
+            var serviceToDelete = await _dbContext.DentalStudioServices.Where(_ => _.Id == id).FirstOrDefaultAsync();
+            if (serviceToDelete != null)
+            {
+                _dbContext.Remove(serviceToDelete);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

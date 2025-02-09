@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using TheApp.Application.ApplicationUser;
 using TheApp.Application.DataTransferObjects;
-using TheApp.Application.DentalStudioServiceDTO;
 using TheApp.Application.DataTransferObjects.Commands.EditDentalStudio;
 using TheApp.Domain.Entities;
 
@@ -39,7 +33,7 @@ namespace TheApp.Application.Mappings
 
             CreateMap<DentalStudioDTO, EditDentalStudioCommand>();
 
-            CreateMap<DentalStudioService, TheApp.Application.DentalStudioServiceDTO.DentalStudioServiceDTO>().ReverseMap();
+            CreateMap<DentalStudioService, DentalStudioServiceDTO.DentalStudioServiceDTO>().ReverseMap();
 		}
     }
 }
