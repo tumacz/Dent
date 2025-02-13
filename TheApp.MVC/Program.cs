@@ -18,6 +18,7 @@ var admin = scope.ServiceProvider.GetRequiredService<AdminSeeder>();
 
 await seeder.Seed();
 await admin.Seed();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

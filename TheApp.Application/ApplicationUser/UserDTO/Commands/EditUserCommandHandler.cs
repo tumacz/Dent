@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using System.Security.Principal;
 using System.Text.Json;
 using TheApp.Domain.Interfaces;
 
@@ -28,13 +27,13 @@ namespace TheApp.Application.ApplicationUser.UserDTO.Commands
             var roles = JsonSerializer.Deserialize<List<string>>(request.Roles[0]);
 
             bool adminChanges = (currentUser.Id == request.Id && !roles.Contains("Administrator"));
-
             if(adminChanges)
             {
                 throw new UnauthorizedAccessException("You cannot remove the Administrator role.");
             }
 
             await _repository.CommitEmail(userToEdit, request.Email);
+
             if (roles != null) 
             {
                 await _repository.CommitRoles(userToEdit, roles);

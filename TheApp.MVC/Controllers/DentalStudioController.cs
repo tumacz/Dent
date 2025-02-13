@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TheApp.Application.AppointmentDTO.Commands.CreateAppointment;
 using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
 using TheApp.Application.DataTransferObjects.Commands.EditDentalStudio;
 using TheApp.Application.DataTransferObjects.Queries.GetAllDentaStudiosQuery;
@@ -38,7 +39,7 @@ namespace TheApp.MVC.Controllers
 
 
         #region CreateDentalStudio
-        [Authorize(Roles = "Administrator")]
+        [Authorize]
         public IActionResult Create()
         {
             if(!User.IsInRole("Administrator"))
@@ -66,6 +67,7 @@ namespace TheApp.MVC.Controllers
         #endregion
 
         #region EditDentalStudio
+        [Authorize]
         [Route("DentalStudio/{encodedName}/Edit")]
         public async Task<IActionResult> Edit(string encodedName)
         {
@@ -82,6 +84,7 @@ namespace TheApp.MVC.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("DentalStudio/{encodedName}/Edit")]
         public async Task<IActionResult> Edit(string encodedName, EditDentalStudioCommand command)
         {
@@ -98,7 +101,7 @@ namespace TheApp.MVC.Controllers
 
         #region DentalStudioService
         [HttpPost]
-        [Authorize(Roles ="Moderator")]
+        [Authorize]
         [Route("DentalStudio/DentalStudioService")]
         public async Task<IActionResult> CreateDentalStudioService(CreateDentalStudioServiceCommand command)
         {
@@ -120,10 +123,30 @@ namespace TheApp.MVC.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         [Route("DentalStudio/DentalStudioService/{id}")]
         public async Task<IActionResult> DeleteDentalStudioService(int id)
         {
             await _mediator.Send(new DeleteDentalStudioServiceByIdCommand() { Id = id});
+            return Ok();
+        }
+        #endregion
+
+        #region Appointment
+        [HttpPost]
+        [Authorize]
+        [Route("DentalStudio/Appointment")]
+        public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentCommand command)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _mediator.Send(command);
+
+            this.SetNotification("success", $"Appointment successfully registered: {command.ServiceName}");
+
             return Ok();
         }
         #endregion

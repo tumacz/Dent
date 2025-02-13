@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheApp.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using TheApp.Infrastructure.Persistence;
 namespace TheApp.Infrastructure.Migrations
 {
     [DbContext(typeof(TheAppDbContext))]
-    partial class TheAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250210203050_AppointmentAdded")]
+    partial class AppointmentAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,9 +235,8 @@ namespace TheApp.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
 
                     b.Property<int>("DentalStudioServiceId")
                         .HasColumnType("int");

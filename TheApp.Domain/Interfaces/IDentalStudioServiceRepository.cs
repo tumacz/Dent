@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheApp.Domain.Entities;
+﻿using TheApp.Domain.Entities;
 
 namespace TheApp.Domain.Interfaces
 {
@@ -14,5 +9,7 @@ namespace TheApp.Domain.Interfaces
         Task Commit();
         Task <IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName);
         Task DeleteDentalStudioService(int id);
+        Task <DentalStudioService?> GetById(int id);
+        Task <List<Appointment>> GetAppointmentsForService(int id, DateTime fromDate);
     }
 }

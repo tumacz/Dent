@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using TheApp.Infrastructure.Migrations;
 
 namespace TheApp.Infrastructure.Seeders
 {
@@ -29,7 +28,7 @@ namespace TheApp.Infrastructure.Seeders
             {
                 adminUser = new IdentityUser { UserName = "moderator@admin.com", Email = "moderator@admin.com" };
                 var result = await _userManager.CreateAsync(adminUser, "Pa$$word1");
-        
+
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(adminUser, "Moderator");

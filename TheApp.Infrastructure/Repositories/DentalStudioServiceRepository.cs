@@ -22,13 +22,27 @@ namespace TheApp.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<DentalStudioService>> GetAll() => await _dbContext.DentalStudioServices.ToListAsync();
+        public async Task<IEnumerable<DentalStudioService>> GetAll() =>
+            await _dbContext.DentalStudioServices.ToListAsync();
 
-        public async Task<IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName) => await _dbContext.DentalStudioServices.Where(c => c.DentalStudio.EncodedName == encodedName).ToListAsync();
+        public async Task<IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName) =>
+            await _dbContext.DentalStudioServices
+                .Where(c => c.DentalStudio.EncodedName == encodedName)
+                .ToListAsync();
+
+        public async Task<DentalStudioService?> GetById(int id) =>
+            await _dbContext.DentalStudioServices
+                .Include(s => s.DentalStudio)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+        public async Task<List<Appointment>> GetAppointmentsForService(int serviceId, DateTime fromDate) =>
+            await _dbContext.Appointments
+                .Where(a => a.DentalStudioServiceId == serviceId && a.StartTime >= fromDate)
+                .ToListAsync();
 
         public async Task DeleteDentalStudioService(int id)
         {
-            var serviceToDelete = await _dbContext.DentalStudioServices.Where(_ => _.Id == id).FirstOrDefaultAsync();
+            var serviceToDelete = await _dbContext.DentalStudioServices.FirstOrDefaultAsync(s => s.Id == id);
             if (serviceToDelete != null)
             {
                 _dbContext.Remove(serviceToDelete);

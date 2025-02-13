@@ -20,11 +20,12 @@ namespace TheApp.Application.DataTransferObjects.Commands.EditDentalStudio
             var user = _userContext.GetCurrentUser();
 
             var dentalStudio = await _repository.GetByEncodedName(request.EncodedName!);
-            
-            var isEditable = user != null && dentalStudio.CreatedById == user.Id || user != null && user.IsInRole("Moderator");
+
+            var isEditable = user != null && (dentalStudio.CreatedById == user.Id || user.IsInRole("Moderator"));
+
             if (!isEditable)
             {
-                return;
+                throw new UnauthorizedAccessException("You are not authorized to edit a dental studio");
             }
 
             dentalStudio.ContactDetails.PhoneNumber = request.PhoneNumber;

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheApp.Domain.Entities;
-
-namespace TheApp.Application.DataTransferObjects
+﻿namespace TheApp.Application.DataTransferObjects
 {
     public class DentalStudioDTO
     {
@@ -17,9 +9,7 @@ namespace TheApp.Application.DataTransferObjects
         public string? PostalCode { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Link { get; set; }
-
         public string? EncodedName { get; set; }
-
         public bool IsEditable { get; set; }
     }
 }

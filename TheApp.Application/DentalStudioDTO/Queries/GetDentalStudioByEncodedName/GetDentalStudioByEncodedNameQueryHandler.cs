@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.DataTransferObjects.Queries.GetDentalStudioByEncodedName
 {
-	public class GetDentalStudioByEncodedNameQueryHandler : IRequestHandler<GetDentalStudioByEncodedNameQuery, DentalStudioDTO>
+    public class GetDentalStudioByEncodedNameQueryHandler : IRequestHandler<GetDentalStudioByEncodedNameQuery, DentalStudioDTO>
 	{
 		private readonly IMapper _mapper;
 		private readonly IDentalStudioRepository _repository;

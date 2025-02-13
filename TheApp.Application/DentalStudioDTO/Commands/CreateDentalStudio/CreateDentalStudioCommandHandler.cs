@@ -22,10 +22,11 @@ namespace TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio
         public async Task Handle(CreateDentalStudioCommand request, CancellationToken cancellationToken)
         {
             var currentUser = _userContext.GetCurrentUser();
-            if (currentUser == null || !currentUser.IsInRole("Administrator"))
+            if (currentUser == null || !currentUser.IsInRole("Owner"))
             {
-                return;
+                throw new UnauthorizedAccessException("You are not authorized to create a dental studio");
             }
+
             var dentalStudio = _mapper.Map<DentalStudio>(request);
             dentalStudio.EncodeName();
 

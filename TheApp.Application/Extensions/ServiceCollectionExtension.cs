@@ -1,10 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using TheApp.Application.Mappings;
 using FluentValidation.AspNetCore;
 using FluentValidation;
@@ -28,6 +22,8 @@ namespace TheApp.Application.Extensions
                 var scope = provider.CreateScope();
                 var userContext = scope.ServiceProvider.GetRequiredService<IUserContext>();
                 cfg.AddProfile(new DentalStudioMappingProfile(userContext));
+                //cfg.AddProfile(new AppUserMappingProfile());
+                cfg.AddProfile(new AppointmentMappingProfile());
             }).CreateMapper()
             );
                 

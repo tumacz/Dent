@@ -7,25 +7,34 @@ namespace TheApp.Application.DentalStudioServiceDTO.Commands
     public class DeleteDentalStudioServiceByIdCommandHandler : IRequestHandler<DeleteDentalStudioServiceByIdCommand>
     {
         private readonly IUserContext _userContext;
-        private readonly IDentalStudioServiceRepository _dentalStudioServiceRepository;
+        private readonly IDentalStudioServiceRepository _repository;
 
         public DeleteDentalStudioServiceByIdCommandHandler(IUserContext userContext, IDentalStudioServiceRepository dentalStudioServiceRepository)
         {
             _userContext = userContext;
-            _dentalStudioServiceRepository = dentalStudioServiceRepository;
+            _repository = dentalStudioServiceRepository;
         }
 
         public async Task Handle(DeleteDentalStudioServiceByIdCommand request, CancellationToken cancellationToken)
         {
             var userContext = _userContext.GetCurrentUser();
-            if (userContext != null && userContext.IsInRole("Moderator"))
+            if (userContext == null)
             {
-                await _dentalStudioServiceRepository.DeleteDentalStudioService(request.Id);
+                throw new InvalidOperationException("Context user is not present");
             }
-            else
+
+            if (!(userContext.IsInRole("Moderator") || userContext.Id == request.Id.ToString()))
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("You are not authorized to delete this service.");
             }
+
+            var service = await _repository.GetById(request.Id);
+            if (service == null)
+            {
+                throw new KeyNotFoundException($"Dental studio service with ID {request.Id} does not exist.");
+            }
+
+            await _repository.DeleteDentalStudioService(request.Id);
         }
     }
 }

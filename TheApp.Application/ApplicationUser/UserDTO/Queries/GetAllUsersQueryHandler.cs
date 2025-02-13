@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.ApplicationUser.UserDTO.Queries
@@ -23,7 +22,14 @@ namespace TheApp.Application.ApplicationUser.UserDTO.Queries
             foreach (var user in users)
             {
                 var roles = await _userRepository.GetRolesForUser(user);
-                usersWithRoles.Add(new AppUserDTO() { Id = user.Id, UserName = user.UserName, Email = user.Email, Roles = roles.ToList(), AvailableRoles = availableRoles.ToList() });
+                usersWithRoles.Add(new AppUserDTO()
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Roles = roles.ToList(),
+                    AvailableRoles = availableRoles.ToList()!
+                });
             }
 
             return usersWithRoles;

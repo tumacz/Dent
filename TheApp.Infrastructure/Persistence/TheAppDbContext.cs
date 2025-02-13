@@ -11,6 +11,7 @@ namespace TheApp.Infrastructure.Persistence
         public DbSet<DentalStudio> DentalStudios { get; set; }
         public DbSet<DentalStudioService> DentalStudioServices { get; set; }
         public DbSet<DentalService> DentalServices {  get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,11 @@ namespace TheApp.Infrastructure.Persistence
 
             modelBuilder.Entity<DentalStudioService>()
                 .HasIndex(c => c.DentalServiceId);
+
+            modelBuilder.Entity<DentalStudioService>()
+                .HasMany(c => c.Appointments)
+                .WithOne(c => c.DentalStudioService)
+                .HasForeignKey(c => c.DentalStudioServiceId);
         }
     }
 }
