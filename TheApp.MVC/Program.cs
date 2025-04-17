@@ -1,4 +1,4 @@
-using TheApp.Infrastructure.Extensions;
+﻿using TheApp.Infrastructure.Extensions;
 using TheApp.Infrastructure.Seeders;
 using TheApp.Application.Extensions;
 

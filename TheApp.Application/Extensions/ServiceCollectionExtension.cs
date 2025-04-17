@@ -22,7 +22,7 @@ namespace TheApp.Application.Extensions
                 var scope = provider.CreateScope();
                 var userContext = scope.ServiceProvider.GetRequiredService<IUserContext>();
                 cfg.AddProfile(new DentalStudioMappingProfile(userContext));
-                //cfg.AddProfile(new AppUserMappingProfile());
+                cfg.AddProfile(new AppUserMappingProfile());
                 cfg.AddProfile(new AppointmentMappingProfile());
             }).CreateMapper()
             );

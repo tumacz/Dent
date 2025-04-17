@@ -1,16 +1,15 @@
 ﻿using FluentValidation;
+using TheApp.Application.ApplicationUser.UserDTO.Commands;
 
-namespace TheApp.Application.ApplicationUser.UserDTO.Commands
+public class EditUserCommandValidator : AbstractValidator<EditUserCommand>
 {
-    public class EditUserCommandValidator : AbstractValidator<EditUserCommand>
+    public EditUserCommandValidator()
     {
-        private readonly List<string> _availableRoles = new List<string> { "Administrator", "Moderator", "Owner" };
-
-        public EditUserCommandValidator()
-        {
-            RuleFor(c => c.Roles)
-                .Must(roles => roles == null || !roles.Any() || roles.All(role => _availableRoles.Contains(role)))
-                .WithMessage("All roles must be valid and exist in the available roles.");
-        }
+        RuleFor(c => c.Email)
+            .NotNull().WithMessage("Email jest wymagany.")
+            .NotEmpty().WithMessage("Email jest wymagany.")
+            .EmailAddress().WithMessage("Niepoprawny format adresu e-mail.")
+            .Matches(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+            .WithMessage("Email musi zawierać poprawną domenę.");
     }
 }
