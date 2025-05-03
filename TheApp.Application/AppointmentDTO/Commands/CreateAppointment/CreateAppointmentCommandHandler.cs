@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using MediatR;
 using TheApp.Application.ApplicationUser;
 using TheApp.Domain.Entities;
 using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.AppointmentDTO.Commands.CreateAppointment
 {
-    public class CreateAppointmentCommandHandler
+    public class CreateAppointmentCommandHandler : IRequestHandler<CreateAppointmentCommand, int>
     {
         private readonly IAppointmentRepository _repository;
         private readonly IMapper _mapper;
@@ -18,7 +19,7 @@ namespace TheApp.Application.AppointmentDTO.Commands.CreateAppointment
             _userContext = userContext;
         }
 
-        public async Task Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
         {
             var currentUser = _userContext.GetCurrentUser();
             if (currentUser == null || !currentUser.IsInRole("Owner"))
@@ -29,6 +30,8 @@ namespace TheApp.Application.AppointmentDTO.Commands.CreateAppointment
 
             appointment.CreatedById = currentUser.Id;
             await _repository.Create(appointment);
+
+            return appointment.Id;
         }
     }
 }

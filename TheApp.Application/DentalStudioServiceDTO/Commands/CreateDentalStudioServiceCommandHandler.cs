@@ -4,7 +4,7 @@ using MediatR;
 
 namespace TheApp.Application.DentalStudioServiceDTO.Commands
 {
-    public class CreateDentalStudioServiceCommandHandler : IRequestHandler<CreateDentalStudioServiceCommand>
+    public class CreateDentalStudioServiceCommandHandler : IRequestHandler<CreateDentalStudioServiceCommand, int>
     {
         private readonly IUserContext _userContext;
         private readonly IDentalStudioRepository _dentalStudioRepository;
@@ -17,14 +17,14 @@ namespace TheApp.Application.DentalStudioServiceDTO.Commands
             _dentalStudioServiceRepository = dentalStudioServiceRepository;
         }
 
-        public async Task Handle(CreateDentalStudioServiceCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateDentalStudioServiceCommand request, CancellationToken cancellationToken)
         {
             var dentalStudio = await _dentalStudioRepository.GetByEncodedName(request.DentalStudioEncodedName!);
             var user = _userContext.GetCurrentUser();
             var isEdibable = user != null && (dentalStudio.CreatedById == user.Id || user.IsInRole("Moderator"));
             if (!isEdibable)
             {
-                return;
+                throw new UnauthorizedAccessException();
             }
 
             var dentalStudioService = new TheApp.Domain.Entities.DentalStudioService()
@@ -35,6 +35,8 @@ namespace TheApp.Application.DentalStudioServiceDTO.Commands
             };
 
             await _dentalStudioServiceRepository.Create(dentalStudioService);
+
+            return dentalStudioService.Id;
         }
     }
 }

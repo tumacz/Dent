@@ -1,12 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using TheApp.Application.Mappings;
-using FluentValidation.AspNetCore;
+﻿using AutoMapper;
 using FluentValidation;
-using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
+using FluentValidation.AspNetCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TheApp.Application.ApplicationUser;
-using AutoMapper;
-using TheApp.Application.ApplicationUser.UserDTO.Commands;
+using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
+using TheApp.Application.Mappings;
 
 namespace TheApp.Application.Extensions
 {
@@ -26,14 +25,12 @@ namespace TheApp.Application.Extensions
                 cfg.AddProfile(new AppointmentMappingProfile());
             }).CreateMapper()
             );
-                
-            services.AddValidatorsFromAssemblyContaining<CreateDentalStudioCommandValidator>()
-                .AddFluentValidation()
-                .AddFluentValidationClientsideAdapters();
 
-            services.AddValidatorsFromAssemblyContaining<EditUserCommandValidator>()
-                .AddFluentValidation()
-                .AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<CreateDentalStudioCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<EditUserCommandValidator>();
+
+            services.AddFluentValidationAutoValidation()
+                    .AddFluentValidationClientsideAdapters();
         }
     }
 }

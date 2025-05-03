@@ -6,7 +6,7 @@ using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio
 {
-    public class CreateDentalStudioCommandHandler : IRequestHandler<CreateDentalStudioCommand>
+    public class CreateDentalStudioCommandHandler : IRequestHandler<CreateDentalStudioCommand, int>
     {
         private readonly IDentalStudioRepository _repository;
         private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio
             _userContext = userContext;
         }
 
-        public async Task Handle(CreateDentalStudioCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateDentalStudioCommand request, CancellationToken cancellationToken)
         {
             var currentUser = _userContext.GetCurrentUser();
             if (currentUser == null)// || !currentUser.IsInRole("Owner"))
@@ -32,6 +32,8 @@ namespace TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio
 
             dentalStudio.CreatedById = currentUser.Id;
             await _repository.Create(dentalStudio);
+
+            return dentalStudio.Id;
         }
     }
 }

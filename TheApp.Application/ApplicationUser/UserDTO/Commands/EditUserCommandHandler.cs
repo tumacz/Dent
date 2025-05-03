@@ -24,7 +24,7 @@ namespace TheApp.Application.ApplicationUser.UserDTO.Commands
             }
 
             var userToEdit = await _repository.GetUserById(request.Id);
-            var roles = JsonSerializer.Deserialize<List<string>>(request.Roles[0]);
+            var roles = request.Roles;
 
             bool adminChanges = (currentUser.Id == request.Id && !roles.Contains("Administrator"));
             if(adminChanges)

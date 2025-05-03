@@ -2,153 +2,89 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TheApp.Application.AppointmentDTO.Commands.CreateAppointment;
+using TheApp.Application.ApplicationUser;
 using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
 using TheApp.Application.DataTransferObjects.Commands.EditDentalStudio;
 using TheApp.Application.DataTransferObjects.Queries.GetAllDentaStudiosQuery;
 using TheApp.Application.DataTransferObjects.Queries.GetDentalStudioByEncodedName;
-using TheApp.Application.DentalStudioServiceDTO.Commands;
-using TheApp.Application.DentalStudioServiceDTO.Queries;
-using TheApp.MVC.Extensions;
 
 namespace TheApp.MVC.Controllers
 {
-    public class DentalStudioController : Controller
+    [ApiController]
+    [Route("api/dental-studio")]
+    public class DentalStudioController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IUserContext _userContext;//temp
         private readonly IMapper _mapper;
 
-        public DentalStudioController(IMediator mediator, IMapper mapper)
+        public DentalStudioController(IMediator mediator, IUserContext userContext, IMapper mapper)
         {
             _mediator = mediator;
+            _userContext = userContext;
             _mapper = mapper;
         }
-
-        public async Task<IActionResult> Index()
+        #region temp
+        [HttpGet("ping")]
+        public IActionResult Ping()
         {
-            var dentalStudios = await _mediator.Send(new GetAllDentalStudiosQuery());
-            return View(dentalStudios);
+            return Ok("pong");
         }
 
-        [Route("DentalStudio/{encodedName}/Details")]
-		public async Task<IActionResult> Details(string encodedName)
-		{
-            var details = await _mediator.Send(new GetDentalStudioByEncodedNameQuery(encodedName));
-			return View(details);
-		}
-
-
-        #region CreateDentalStudio
-        [Authorize]
-        public IActionResult Create()
+        [HttpGet("me")]//temp
+        public IActionResult GetCurrentUser()
         {
-            if(!User.IsInRole("Administrator"))
+            var user = _userContext.GetCurrentUser();
+            if (user == null)
+                return Unauthorized("User is not authenticated");
+
+            return Ok(new
             {
-                RedirectToAction("NoAccess", "Home");
-            }
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Create(CreateDentalStudioCommand command)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(command);
-            }
-
-            await _mediator.Send(command);
-
-            this.SetNotification("success", $"Created Dental Studio: {command.Name}");
-
-            return RedirectToAction(nameof(Index));
+                user.Id,
+                user.Email,
+                Roles = user.Roles.ToList()
+            });
         }
         #endregion
 
-        #region EditDentalStudio
-        [Authorize]
-        [Route("DentalStudio/{encodedName}/Edit")]
-        public async Task<IActionResult> Edit(string encodedName)
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll()
         {
-            var dto = await _mediator.Send(new GetDentalStudioByEncodedNameQuery(encodedName));
-
-            if(!dto.IsEditable)
-            {
-                return RedirectToAction("NoAccess", "Home");
-            }
-
-            EditDentalStudioCommand model = _mapper.Map<EditDentalStudioCommand>(dto);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize]
-        [Route("DentalStudio/{encodedName}/Edit")]
-        public async Task<IActionResult> Edit(string encodedName, EditDentalStudioCommand command)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(command);
-            }
-
-            await _mediator.Send(command);
-
-            return RedirectToAction(nameof(Index));
-        }
-        #endregion
-
-        #region DentalStudioService
-        [HttpPost]
-        [Authorize]
-        [Route("DentalStudio/DentalStudioService")]
-        public async Task<IActionResult> CreateDentalStudioService(CreateDentalStudioServiceCommand command)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            await _mediator.Send(command);
-
-            return Ok();
-        }
-
-        [HttpGet]
-        [Route("DentalStudio/{encodedName}/DentalStudioService")]
-        public async Task<IActionResult> GetDentalStudioServices(string encodedName)
-        {
-            var data = await _mediator.Send(new GetDentalStudioServiceForEncodedNameQuery(encodedName) { EncodedName = encodedName});
+            var data = await _mediator.Send(new GetAllDentalStudiosQuery());
             return Ok(data);
         }
 
-        [HttpDelete]
-        [Authorize]
-        [Route("DentalStudio/DentalStudioService/{id}")]
-        public async Task<IActionResult> DeleteDentalStudioService(int id)
+        [HttpGet("{encodedName}")]
+        public async Task<IActionResult> Details(string encodedName)
         {
-            await _mediator.Send(new DeleteDentalStudioServiceByIdCommand() { Id = id});
-            return Ok();
+            var data = await _mediator.Send(new GetDentalStudioByEncodedNameQuery(encodedName));
+            return Ok(data);
         }
-        #endregion
 
-        #region Appointment
-        [HttpPost]
+        [HttpPost("create")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Create([FromBody] CreateDentalStudioCommand command)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            // TODO(macio): separate DTO for read and push
+            var id = await _mediator.Send(command);
+
+            return Ok(new { message = $"Created Dental Studio: {id}" });
+        }
+
         [Authorize]
-        [Route("DentalStudio/Appointment")]
-        public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentCommand command)
+        [HttpPut("{encodedName}")]
+        public async Task<IActionResult> Edit(string encodedName, [FromBody] EditDentalStudioCommand command)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            command.EncodedName = encodedName;
             await _mediator.Send(command);
-
-            this.SetNotification("success", $"Appointment successfully registered: {command.ServiceName}");
-
-            return Ok();
+            return NoContent();
         }
-        #endregion
     }
 }

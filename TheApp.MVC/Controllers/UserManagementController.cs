@@ -1,34 +1,38 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using TheApp.Application.ApplicationUser.UserDTO.Commands;
 using TheApp.Application.ApplicationUser.UserDTO.Queries;
 
 namespace TheApp.MVC.Controllers
 {
-    public class UserManagementSystem : Controller
+    [ApiController]
+    [Route("api/user-management")]
+    public class UserManagementController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public UserManagementSystem(IMediator mediator) 
+        public UserManagementController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [Authorize(Roles = "Administrator")]
+        [HttpGet("all")]
         public async Task<IActionResult> Index()
         {
             var users = await _mediator.Send(new GetAllUsersQuery());
-            return View(users);
+            return Ok(users);
         }
 
-        [HttpPost]
         [Authorize(Roles = "Administrator")]
-        [Route("UserManagementSystem/UserEdit")]
-        public async Task<IActionResult> EditUserRoles(EditUserCommand command)
+        [HttpPost("user-edit/{id}")]
+        public async Task<IActionResult> EditUserRoles(string id,[FromBody] EditUserCommand command)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            command.Id = id;
             await _mediator.Send(command);
-            return RedirectToAction(nameof(Index));
+            return NoContent();
         }
     }
 }

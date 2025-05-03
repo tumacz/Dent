@@ -2,7 +2,7 @@
 
 namespace TheApp.Application.AppointmentDTO.Commands.CreateAppointment
 {
-    public class CreateAppointmentCommand : AppointmentDTO, IRequest
+    public class CreateAppointmentCommand : AppointmentDTO, IRequest<int>
     {
     }
 }

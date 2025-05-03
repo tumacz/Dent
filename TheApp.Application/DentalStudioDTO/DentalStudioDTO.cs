@@ -10,6 +10,6 @@
         public string? PhoneNumber { get; set; }
         public string? Link { get; set; }
         public string? EncodedName { get; set; }
-        public bool IsEditable { get; set; }
+        public bool IsEditable { get; set; }// TODO(macio): separate DTO for read and push
     }
 }
