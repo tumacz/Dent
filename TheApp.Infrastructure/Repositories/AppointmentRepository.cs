@@ -27,5 +27,20 @@ namespace TheApp.Infrastructure.Repositories
                 .Where(c => c.DentalStudioService.DentalStudioId == dentalStudioId && c.StartTime >= fromDate)
                 .ToListAsync();
         }
+
+        public async Task<Appointment> GetAppointmentById(int appointmentId)
+        {
+            return await _dbContext.Appointments.FirstAsync(c => c.Id == appointmentId);
+        }
+
+        public async Task Delete(int id)
+        {
+            var appintmentToDelete = await _dbContext.DentalStudioServices.FirstOrDefaultAsync(s => s.Id == id);
+            if (appintmentToDelete != null)
+            {
+                _dbContext.Remove(appintmentToDelete);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

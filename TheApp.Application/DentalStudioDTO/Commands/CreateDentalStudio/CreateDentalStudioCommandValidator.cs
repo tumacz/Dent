@@ -12,7 +12,7 @@ namespace TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio
                 .Length(2, 20)
                 .Custom((value, context) =>
                 {
-                    var existingDentalStudio = repository.GetByName(value).Result;
+                    var existingDentalStudio = repository.GetByEncodedName(value).Result;
                     if (existingDentalStudio != null)
                     {
                         context.AddFailure($"nazwa: '{value}' nie jest unikalna");

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TheApp.Application.AppointmentDTO.Commands.Appointment;
 using TheApp.Application.AppointmentDTO.Commands.CreateAppointment;
 
 namespace TheApp.MVC.Controllers
@@ -25,6 +26,15 @@ namespace TheApp.MVC.Controllers
             var id = await _mediator.Send(command);
 
             return Ok(new { message = "Created", id });
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteById([FromBody] DeleteAppointmentCommand command)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _mediator.Send(new DeleteAppointmentCommand() { Id = command.Id });
+            return Ok();
         }
     }
 }

@@ -2,7 +2,9 @@
 
 namespace TheApp.Application.DentalStudioServiceDTO.Commands
 {
-    public class DeleteDentalStudioServiceByIdCommand : DentalStudioServiceDTO, IRequest
+    public class DeleteDentalStudioServiceByIdCommand :  IRequest
     {
+        public int Id { get; set; }
+        public int CreatedById { get; set; }
     }
 }

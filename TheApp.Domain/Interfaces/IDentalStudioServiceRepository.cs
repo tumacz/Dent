@@ -5,7 +5,7 @@ namespace TheApp.Domain.Interfaces
     public interface IDentalStudioServiceRepository
     {
         Task Create(DentalStudioService dentalStudioservice);
-        Task<IEnumerable<DentalStudioService>> GetAll();
+        //Task<IEnumerable<DentalStudioService>> GetAll();
         Task Commit();
         Task <IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName);
         Task DeleteDentalStudioService(int id);

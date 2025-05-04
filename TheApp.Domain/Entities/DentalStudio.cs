@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Text.RegularExpressions;
 
 namespace TheApp.Domain.Entities
 {
@@ -11,12 +12,17 @@ namespace TheApp.Domain.Entities
         public DentalStudioContactDetails ContactDetails { get; set; } = default!;
 
         public string? CreatedById {  get; set; } 
-        public IdentityUser? CreatedBy { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
 
         public string EncodedName { get; private set; } = default!;
 
         public List<DentalStudioService> DentalStudioServices { get; set; } = new();
 
-        public void EncodeName() => EncodedName = Name.ToLower().Replace(" ", "-");
+        //public void EncodeName() => EncodedName = Name.ToLower().Replace(" ", "-");
+        public void EncodeName()
+        {
+            var temp = Regex.Replace(Name.ToLowerInvariant(), @"[^a-z0-9\s-]", "");
+            EncodedName = Regex.Replace(temp, @"\s+", "-");
+        }
     }
 }

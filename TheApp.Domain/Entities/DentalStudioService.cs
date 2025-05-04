@@ -10,7 +10,7 @@
         public DentalStudio DentalStudio { get; set; } = default!;
 
         public int? DentalServiceId { get; set; } = default!;
-        public DentalService? DentalService { get; set; } = default!;
+        public ServiceTag? DentalService { get; set; } = default!;
         public List<Appointment> Appointments { get; set; } = new();
 
     }

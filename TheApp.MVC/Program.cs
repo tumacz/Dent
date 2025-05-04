@@ -5,13 +5,23 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//builder.Services.AddControllersWithViews(options =>options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+// 🔹 Rejestrowanie kontrolerów i usług
 builder.Services.AddControllers();
-builder.Services.AddInfrastructure(builder.Configuration);//Pass connection string
-
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
+// 🔹 CORS dla React frontend (localhost:5173)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// 🔹 Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -25,6 +35,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// 🔹 Seedowanie danych startowych
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<DentalStudioSeeder>();
@@ -34,35 +45,33 @@ using (var scope = app.Services.CreateScope())
     await admin.Seed();
 }
 
-// Configure the HTTP request pipeline.
+// 🔹 Konfiguracja middleware
 if (!app.Environment.IsDevelopment())
 {
-    //app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
+// 🔹 Użyj CORS zanim autoryzacja
+app.UseCors("AllowFrontend");
+
 app.UseAuthorization();
-
 app.MapControllers();
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=DentalStudio}/{action=Index}/{id?}");
 
-//app.MapRazorPages();
+// 🔹 Swagger UI dostępne pod "/"
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "TheApp API v1");
-    options.RoutePrefix = ""; // 👈 Swagger dostępny pod "/"
+    options.RoutePrefix = ""; // <-- Swagger pod rootem
 });
+
+// 🔹 Wymagane do testów integracyjnych
+
 
 app.Run();
 
-//tests require partial
-public partial class Program { };
+public partial class Program { }

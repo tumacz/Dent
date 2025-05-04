@@ -4,13 +4,13 @@ using TheApp.Domain.Entities;
 
 namespace TheApp.Infrastructure.Persistence
 {
-    public class TheAppDbContext : IdentityDbContext
+    public class TheAppDbContext : IdentityDbContext<ApplicationUser>
     {
         public TheAppDbContext(DbContextOptions<TheAppDbContext> options) : base(options) { }
 
         public DbSet<DentalStudio> DentalStudios { get; set; }
         public DbSet<DentalStudioService> DentalStudioServices { get; set; }
-        public DbSet<DentalService> DentalServices {  get; set; }
+        public DbSet<ServiceTag> ServiceTags {  get; set; }
         public DbSet<Appointment> Appointments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

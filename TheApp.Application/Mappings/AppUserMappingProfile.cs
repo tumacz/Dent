@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using TheApp.Application.ApplicationUser.UserDTO;
-using TheApp.Domain.Entities;
 
 namespace TheApp.Application.Mappings
 {
@@ -8,7 +7,7 @@ namespace TheApp.Application.Mappings
     {
         public AppUserMappingProfile() 
         {
-            CreateMap<AppUser, AppUserDTO>();
+            CreateMap<Domain.Entities.ApplicationUser, AppUserDTO>();
         }
     }
 }

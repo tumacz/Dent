@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheApp.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using TheApp.Infrastructure.Persistence;
 namespace TheApp.Infrastructure.Migrations
 {
     [DbContext(typeof(TheAppDbContext))]
-    partial class TheAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250504194235_RefactorDentalEntities_2025_05_04")]
+    partial class RefactorDentalEntities_2025_05_04
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

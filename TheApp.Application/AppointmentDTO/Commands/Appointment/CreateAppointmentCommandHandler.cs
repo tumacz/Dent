@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using TheApp.Application.ApplicationUser;
-using TheApp.Domain.Entities;
 using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.AppointmentDTO.Commands.CreateAppointment
@@ -26,9 +25,9 @@ namespace TheApp.Application.AppointmentDTO.Commands.CreateAppointment
             {
                 throw new UnauthorizedAccessException("You are not authorized to create an appointment");
             }
-            var appointment = _mapper.Map<Appointment>(request);
+            var appointment = _mapper.Map<Domain.Entities.Appointment>(request);
 
-            appointment.CreatedById = currentUser.Id;
+            appointment.ClientId = currentUser.Id;
             await _repository.Create(appointment);
 
             return appointment.Id;

@@ -16,7 +16,7 @@ namespace TheApp.MVC.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
         [HttpGet("all")]
         public async Task<IActionResult> Index()
         {

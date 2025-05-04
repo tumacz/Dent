@@ -1,61 +1,57 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TheApp.Domain.Entities;
 using TheApp.Domain.Interfaces;
 
 namespace TheApp.Infrastructure.Repositories
 {
     public class AppUserRepository : IAppUserRepository
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AppUserRepository(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AppUserRepository(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
-        public async Task<IEnumerable<IdentityUser>> GetAllUsers()
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
         {
-            var allUsers = await _userManager.Users.ToListAsync();
-            return allUsers;
+            return await _userManager.Users.ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetRolesForUser(IdentityUser user)
+        public async Task<ApplicationUser> GetUserById(string id)
         {
-            var roles = await _userManager.GetRolesAsync(user);
-            return roles;
+            var user = await _userManager.FindByIdAsync(id);
+            return user ?? throw new Exception($"User with ID {id} not found.");
+        }
+
+        public async Task<IEnumerable<string>> GetRolesForUser(ApplicationUser user)
+        {
+            return await _userManager.GetRolesAsync(user);
         }
 
         public async Task<IEnumerable<string?>> GetAvailableRoles()
         {
-            var availableRolesIdentity = await _roleManager.Roles.ToListAsync();
-            IEnumerable<string?> availableRoles = availableRolesIdentity.Select(role => role.Name);
-            return availableRoles;
+            var roles = await _roleManager.Roles.ToListAsync();
+            return roles.Select(r => r.Name);
         }
 
-        public async Task<IdentityUser> GetUserById(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-
-            return user!;
-        }
-
-        public async Task CommitEmail(IdentityUser user, string newEmail)
+        public async Task CommitEmail(ApplicationUser user, string newEmail)
         {
             var token = await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
-
             var result = await _userManager.ChangeEmailAsync(user, newEmail, token);
+
             if (!result.Succeeded)
             {
                 throw new Exception($"Failed to change email: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
         }
 
-        public async Task CommitRoles(IdentityUser user, IEnumerable<string> updatedUserRoles)
+        public async Task CommitRoles(ApplicationUser user, IEnumerable<string> updatedUserRoles)
         {
             var currentRoles = await _userManager.GetRolesAsync(user) ?? new List<string>();
-
             updatedUserRoles = updatedUserRoles ?? new List<string>();
 
             if (currentRoles.Any())
@@ -79,6 +75,5 @@ namespace TheApp.Infrastructure.Repositories
                 }
             }
         }
-
     }
 }
