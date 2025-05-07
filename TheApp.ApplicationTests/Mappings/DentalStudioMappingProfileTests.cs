@@ -1,16 +1,10 @@
 ﻿using Xunit;
-using TheApp.Application.Mappings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheApp.Application.ApplicationUser;
 using Moq;
-using TheApp.Application.DataTransferObjects;
 using AutoMapper;
 using TheApp.Domain.Entities;
 using FluentAssertions;
+using TheApp.Application.DentalStudio.DataTransferObjects;
 
 namespace TheApp.Application.Mappings.Tests
 {
@@ -30,7 +24,7 @@ namespace TheApp.Application.Mappings.Tests
 
             var mapper = configuration.CreateMapper();
 
-            var dto = new DentalStudioDTO()
+            var dto = new DentalStudioDataTransferObject()
             {
                 City = "1",
                 PhoneNumber = "2",
@@ -40,7 +34,7 @@ namespace TheApp.Application.Mappings.Tests
             };
 
             //act
-            var result = mapper.Map<DentalStudio>(dto);
+            var result = mapper.Map<Domain.Entities.DentalStudio>(dto);
             
             //assert
             result.Should().NotBeNull();
@@ -65,7 +59,7 @@ namespace TheApp.Application.Mappings.Tests
 
             var mapper = configuration.CreateMapper();
 
-            var dentalStudio = new DentalStudio()
+            var dentalStudio = new Domain.Entities.DentalStudio()
             {
                 Id = 1,
                 CreatedById = "1",
@@ -80,7 +74,7 @@ namespace TheApp.Application.Mappings.Tests
             };
 
             //act
-            var result = mapper.Map<DentalStudioDTO>(dentalStudio);
+            var result = mapper.Map<DentalStudioDataTransferObject>(dentalStudio);
 
             //assert
             result.City.Should().Be(dentalStudio.ContactDetails.City);

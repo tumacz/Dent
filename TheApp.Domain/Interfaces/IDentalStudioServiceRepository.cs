@@ -5,11 +5,12 @@ namespace TheApp.Domain.Interfaces
     public interface IDentalStudioServiceRepository
     {
         Task Create(DentalStudioService dentalStudioservice);
-        //Task<IEnumerable<DentalStudioService>> GetAll();
+        Task<IEnumerable<DentalStudioService>> GetAllServices();
         Task Commit();
-        Task <IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName);
+        Task <IEnumerable<DentalStudioService>> GetAllServicesByStudioEncodedName(string encodedName);
         Task DeleteDentalStudioService(int id);
-        Task <DentalStudioService?> GetById(int id);
-        Task <List<Appointment>> GetAppointmentsForService(int id, DateTime fromDate);
+        Task <DentalStudioService?> GetServiceById(int id);
+        Task <List<Appointment>> GetFutureAppointmentsForService(int id, DateTime fromDate);
+        Task Update(DentalStudioService service);
     }
 }

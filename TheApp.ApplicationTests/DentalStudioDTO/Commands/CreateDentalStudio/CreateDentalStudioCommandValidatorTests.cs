@@ -3,6 +3,7 @@ using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
 using TheApp.Domain.Interfaces;
 using Xunit;
 using FluentValidation.TestHelper;
+using TheApp.Application.DentalStudios.Commands.CreateDentalStudio;
 
 namespace TheApp.ApplicationTests.DentalStudioDTO.Commands.CreateDentalStudio
 {

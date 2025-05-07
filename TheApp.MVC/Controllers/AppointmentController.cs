@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TheApp.Application.AppointmentDTO.Commands.Appointment;
 using TheApp.Application.AppointmentDTO.Commands.CreateAppointment;
+using TheApp.Application.AppointmentDTO.Commands.DeleteAppointment;
 
 namespace TheApp.MVC.Controllers
 {

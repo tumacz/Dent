@@ -2,6 +2,7 @@
 using TheApp.Application.ApplicationUser;
 using Moq;
 using TheApp.Domain.Interfaces;
+using TheApp.Application.DentalStudioServiceDTO.Commands.CreateService;
 
 namespace TheApp.Application.DentalStudioServiceDTO.Commands.Tests
 {

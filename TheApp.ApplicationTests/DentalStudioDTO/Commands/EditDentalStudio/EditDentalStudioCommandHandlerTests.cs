@@ -2,6 +2,7 @@
 using Moq;
 using TheApp.Domain.Interfaces;
 using TheApp.Application.ApplicationUser;
+using TheApp.Application.DentalStudios.Commands.EditDentalStudio;
 
 namespace TheApp.Application.DataTransferObjects.Commands.EditDentalStudio.Tests
 {

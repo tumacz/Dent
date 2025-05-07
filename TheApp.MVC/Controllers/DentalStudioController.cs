@@ -3,10 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheApp.Application.ApplicationUser;
-using TheApp.Application.DataTransferObjects.Commands.CreateDentalStudio;
-using TheApp.Application.DataTransferObjects.Commands.EditDentalStudio;
-using TheApp.Application.DataTransferObjects.Queries.GetAllDentaStudiosQuery;
-using TheApp.Application.DataTransferObjects.Queries.GetDentalStudioByEncodedName;
+using TheApp.Application.DentalStudios.Commands.CreateDentalStudio;
+using TheApp.Application.DentalStudios.Commands.EditDentalStudio;
+using TheApp.Application.DentalStudios.Queries.GetAllDentalStudios;
+using TheApp.Application.DentalStudios.Queries.GetDentalStudioByEncodedName;
 
 namespace TheApp.MVC.Controllers
 {

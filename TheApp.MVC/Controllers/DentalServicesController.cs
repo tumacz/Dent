@@ -2,7 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TheApp.Application.DentalStudioServiceDTO.Commands;
+using TheApp.Application.DentalStudioServiceDTO.Commands.CreateService;
+using TheApp.Application.DentalStudioServiceDTO.Commands.DeleteService;
 using TheApp.Application.DentalStudioServiceDTO.Queries;
 
 namespace TheApp.MVC.Controllers

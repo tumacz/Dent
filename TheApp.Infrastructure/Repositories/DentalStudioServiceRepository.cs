@@ -22,24 +22,6 @@ namespace TheApp.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        //public async Task<IEnumerable<DentalStudioService>> GetAll() =>
-            //await _dbContext.DentalStudioServices.ToListAsync();
-
-        public async Task<IEnumerable<DentalStudioService>> GetAllByEncodedName(string encodedName) =>
-            await _dbContext.DentalStudioServices
-                .Where(c => c.DentalStudio.EncodedName == encodedName)
-                .ToListAsync();
-
-        public async Task<DentalStudioService?> GetById(int id) =>
-            await _dbContext.DentalStudioServices
-                .Include(s => s.DentalStudio)
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-        public async Task<List<Appointment>> GetAppointmentsForService(int serviceId, DateTime fromDate) =>
-            await _dbContext.Appointments
-                .Where(a => a.DentalStudioServiceId == serviceId && a.StartTime >= fromDate)
-                .ToListAsync();
-
         public async Task DeleteDentalStudioService(int id)
         {
             var serviceToDelete = await _dbContext.DentalStudioServices.FirstOrDefaultAsync(s => s.Id == id);
@@ -49,5 +31,31 @@ namespace TheApp.Infrastructure.Repositories
                 await _dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task Update(DentalStudioService service)
+        {
+            _dbContext.DentalStudioServices.Update(service);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        #region GET
+        public async Task<IEnumerable<DentalStudioService>> GetAllServices() =>
+            await _dbContext.DentalStudioServices.ToListAsync();
+
+        public async Task<IEnumerable<DentalStudioService>> GetAllServicesByStudioEncodedName(string encodedName) =>
+            await _dbContext.DentalStudioServices
+                .Where(c => c.DentalStudio.EncodedName == encodedName)
+                .ToListAsync();
+
+        public async Task<DentalStudioService?> GetServiceById(int id) =>
+            await _dbContext.DentalStudioServices
+                .Include(s => s.DentalStudio)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+        public async Task<List<Appointment>> GetFutureAppointmentsForService(int serviceId, DateTime fromDate) =>
+            await _dbContext.Appointments
+                .Where(a => a.DentalStudioServiceId == serviceId && a.StartTime >= fromDate)
+                .ToListAsync();
+        #endregion
     }
 }

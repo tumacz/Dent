@@ -1,4 +1,6 @@
-﻿@model TheApp.Application.DentalStudioServiceDTO.Commands.CreateDentalStudioServiceCommand
+﻿@* @using TheApp.Application.DentalStudioServiceDTO.Commands.CreateService
+
+@model CreateDentalStudioServiceCommand
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createDentalStudioServiceModal">
@@ -44,4 +46,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
+} *@

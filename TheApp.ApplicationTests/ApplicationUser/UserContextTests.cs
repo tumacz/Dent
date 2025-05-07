@@ -1,10 +1,4 @@
 ﻿using Xunit;
-using TheApp.Application.ApplicationUser;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Moq;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -12,7 +6,7 @@ using FluentAssertions;
 
 namespace TheApp.Application.ApplicationUser.Tests
 {
-    public class UserContextTests
+	public class UserContextTests
     {
         [Fact()]
         public void GetCurrentUser_WithAuthenticatedUser_ShouldReturnCurrentUser()

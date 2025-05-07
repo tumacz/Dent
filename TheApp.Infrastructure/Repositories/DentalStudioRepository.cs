@@ -7,6 +7,7 @@ namespace TheApp.Infrastructure.Repositories
 {
     public class DentalStudioRepository : IDentalStudioRepository
     {
+
         private readonly TheAppDbContext _dbContext;
 
         public DentalStudioRepository(TheAppDbContext dbContext) 
@@ -24,8 +25,13 @@ namespace TheApp.Infrastructure.Repositories
 
 		public async Task<IEnumerable<DentalStudio>> GetAll() => await _dbContext.DentalStudios.ToListAsync();
 
-		public async Task<DentalStudio> GetByEncodedName(string encodedName) => await _dbContext.DentalStudios.FirstAsync(s => s.EncodedName == encodedName);
+		public async Task<DentalStudio?> GetByEncodedName(string encodedName) => await _dbContext.DentalStudios.FirstAsync(s => s.EncodedName == encodedName);
 
-		public async Task<DentalStudio?> GetByName(string name) => await _dbContext.DentalStudios.FirstOrDefaultAsync(s => s.Name.ToLower() == name.ToLower());
-	}
+        public async Task<DentalStudio?> GetByOwnerId(string userId)
+        {
+            return await _dbContext.DentalStudios
+                .Include(s => s.ContactDetails)
+                .FirstOrDefaultAsync(s => s.CreatedById == userId);
+        }
+    }
 }

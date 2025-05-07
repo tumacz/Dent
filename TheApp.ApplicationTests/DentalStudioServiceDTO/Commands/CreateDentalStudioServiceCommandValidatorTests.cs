@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentValidation.TestHelper;
+using TheApp.Application.DentalStudioServiceDTO.Commands.CreateService;
 
 namespace TheApp.Application.DentalStudioServiceDTO.Commands.Tests
 {
