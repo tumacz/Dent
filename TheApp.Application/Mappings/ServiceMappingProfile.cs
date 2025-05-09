@@ -12,7 +12,8 @@ namespace TheApp.Application.Mappings
 		{
 			CreateMap<DentalStudioService, DentalStudioServiceDataTransferObject>()
 				.ForMember(dto => dto.ServiceTagName, opt => opt.MapFrom(e => e.DentalService != null ? e.DentalService.Name : string.Empty))
-				.ForMember(dto => dto.StudioEncodedName, opt => opt.MapFrom(e => e.DentalStudio.EncodedName));
+				.ForMember(dto => dto.StudioEncodedName, opt => opt.MapFrom(e => e.DentalStudio.EncodedName))
+				.ForMember(dto => dto.IsEditable, opt => opt.Ignore());
 
 			CreateMap<CreateDentalStudioServiceCommand, DentalStudioService>()
 				.ForMember(dest => dest.DentalServiceId, opt => opt.MapFrom(src => src.DentalServiceId))

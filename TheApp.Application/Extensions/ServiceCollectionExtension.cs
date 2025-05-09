@@ -27,6 +27,7 @@ namespace TheApp.Application.Extensions
                 cfg.AddProfile(new AppUserMappingProfile());
                 cfg.AddProfile(new AppointmentMappingProfile());
                 cfg.AddProfile(new ServiceMappingProfile());
+                cfg.AddProfile(new ServiceTagMappingProfile());
             }).CreateMapper()
             );
 

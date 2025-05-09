@@ -21,7 +21,7 @@ namespace TheApp.Application.DentalStudios.Commands.EditDentalStudio
 			var dentalStudio = await _repository.GetByEncodedName(request.EncodedName!);
 			if (dentalStudio == null)
 			{
-				throw new Exception("No studio to return");
+				throw new KeyNotFoundException($"Dental studio with name: {request.Name} not found");
 			}
 
 			var isEditable = user != null && (dentalStudio.CreatedById == user.Id || user.IsInRole("Moderator"));

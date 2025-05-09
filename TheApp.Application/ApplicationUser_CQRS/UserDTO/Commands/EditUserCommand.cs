@@ -3,9 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace TheApp.Application.ApplicationUser.UserDTO.Commands
 {
-    public class EditUserCommand : AppUserDTO, IRequest
+    public class EditUserCommand : IRequest
     {
-        [JsonIgnore]
-        public override List<string> AvailableRoles { get; set; } = new();
-    }
+		public string Id { get; set; } = default!;
+		public string? Email { get; set; }
+		public List<string> Roles { get; set; } = new();
+	}
 }

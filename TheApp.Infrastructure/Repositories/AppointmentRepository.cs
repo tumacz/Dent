@@ -42,5 +42,24 @@ namespace TheApp.Infrastructure.Repositories
                 await _dbContext.SaveChangesAsync();
             }
         }
-    }
+		public async Task<List<Appointment>> GetAppointmentsByClientId(string clientId)
+		{
+			return await _dbContext.Appointments
+				.Include(a => a.DentalStudioService)
+					.ThenInclude(s => s.DentalService)
+				.Include(a => a.DentalStudioService.DentalStudio)
+				.Where(a => a.ClientId == clientId)
+				.ToListAsync();
+		}
+
+		public async Task<List<Appointment>> GetAppointmentsByStudioEncodedName(string encodedName)
+		{
+			return await _dbContext.Appointments
+				.Include(a => a.DentalStudioService)
+					.ThenInclude(s => s.DentalService)
+				.Include(a => a.DentalStudioService.DentalStudio)
+				.Where(a => a.DentalStudioService.DentalStudio.EncodedName == encodedName)
+				.ToListAsync();
+		}
+	}
 }

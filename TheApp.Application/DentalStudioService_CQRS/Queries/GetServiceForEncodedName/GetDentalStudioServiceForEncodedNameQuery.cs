@@ -1,6 +1,7 @@
 ﻿using MediatR;
+using TheApp.Application.DentalStudioServiceDTO;
 
-namespace TheApp.Application.DentalStudioServiceDTO.Queries
+namespace TheApp.Application.DentalStudioService_CQRS.Queries.GetServiceForEncodedName
 {
     public class GetDentalStudioServiceForEncodedNameQuery : IRequest<IEnumerable<DentalStudioServiceDataTransferObject>>
     {

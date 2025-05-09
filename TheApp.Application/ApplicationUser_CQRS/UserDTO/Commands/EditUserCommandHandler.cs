@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using System.Text.Json;
 using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.ApplicationUser.UserDTO.Commands
 {
-    public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
+	public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
     {
         private readonly IAppUserRepository _repository;
         private readonly IUserContext _userContext;

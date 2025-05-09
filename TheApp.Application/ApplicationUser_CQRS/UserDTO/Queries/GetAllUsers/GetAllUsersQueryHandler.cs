@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using TheApp.Application.ApplicationUser.UserDTO;
 using TheApp.Domain.Interfaces;
 
-namespace TheApp.Application.ApplicationUser.UserDTO.Queries
+namespace TheApp.Application.ApplicationUser_CQRS.UserDTO.Queries.GetAllUsers
 {
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<AppUserDTO>>
     {

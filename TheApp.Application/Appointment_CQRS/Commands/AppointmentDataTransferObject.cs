@@ -1,4 +1,4 @@
-﻿namespace TheApp.Application.AppointmentDTO
+﻿namespace TheApp.Application.Appointment_CQRS.Commands
 {
     public class AppointmentDataTransferObject
     {
@@ -7,7 +7,5 @@
         public string ServiceName { get; set; } = default!;
         public DateTime StartTime { get; set; } = default!;
         public DateTime EndTime { get; set; } = default!;
-        public int CreatedById { get; set; } = default!;
     }
 }
-

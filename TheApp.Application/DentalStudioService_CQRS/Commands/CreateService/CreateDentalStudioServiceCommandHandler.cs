@@ -22,8 +22,9 @@ namespace TheApp.Application.DentalStudioServiceDTO.Commands.CreateService
             var dentalStudio = await _dentalStudioRepository.GetByEncodedName(request.DentalStudioEncodedName!);
             if (dentalStudio == null)
             {
-                throw new Exception("No studio returned");
+                throw new KeyNotFoundException($"Dental studio with name {request.DentalStudioEncodedName} not found");
             }
+
             var user = _userContext.GetCurrentUser();
             var isEdibable = user != null && (dentalStudio.CreatedById == user.Id || user.IsInRole("Moderator"));
             if (!isEdibable)

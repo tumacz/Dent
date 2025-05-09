@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using TheApp.Domain.Entities;
+﻿using TheApp.Domain.Entities;
 
 namespace TheApp.Domain.Interfaces
 {
-    public interface IAppUserRepository
+	public interface IAppUserRepository
     {
         Task<IEnumerable<ApplicationUser>> GetAllUsers();
         Task<IEnumerable<string>> GetRolesForUser(ApplicationUser user);

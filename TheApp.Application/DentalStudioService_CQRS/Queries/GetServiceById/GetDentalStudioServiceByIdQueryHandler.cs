@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
+using TheApp.Application.DentalStudioServiceDTO;
 using TheApp.Domain.Interfaces;
 
-namespace TheApp.Application.DentalStudioServiceDTO.Queries
+namespace TheApp.Application.DentalStudioService_CQRS.Queries.GetServiceById
 {
     public class GetDentalStudioServiceByIdQueryHandler : IRequestHandler<GetDentalStudioServiceByIdQuery, DentalStudioServiceDataTransferObject>
     {

@@ -4,37 +4,40 @@ using TheApp.Domain.Interfaces;
 
 namespace TheApp.Application.DentalStudioServiceDTO.Commands.DeleteService
 {
-    public class DeleteDentalStudioServiceByIdCommandHandler : IRequestHandler<DeleteDentalStudioServiceByIdCommand>
-    {
-        private readonly IUserContext _userContext;
-        private readonly IDentalStudioServiceRepository _repository;
+	public class DeleteDentalStudioServiceByIdCommandHandler : IRequestHandler<DeleteDentalStudioServiceByIdCommand>
+	{
+		private readonly IUserContext _userContext;
+		private readonly IDentalStudioServiceRepository _repository;
 
-        public DeleteDentalStudioServiceByIdCommandHandler(IUserContext userContext, IDentalStudioServiceRepository dentalStudioServiceRepository)
-        {
-            _userContext = userContext;
-            _repository = dentalStudioServiceRepository;
-        }
+		public DeleteDentalStudioServiceByIdCommandHandler(IUserContext userContext, IDentalStudioServiceRepository dentalStudioServiceRepository)
+		{
+			_userContext = userContext;
+			_repository = dentalStudioServiceRepository;
+		}
 
-        public async Task Handle(DeleteDentalStudioServiceByIdCommand request, CancellationToken cancellationToken)
-        {
-            var userContext = _userContext.GetCurrentUser();
-            if (userContext == null)
-            {
-                throw new InvalidOperationException("Context user is not present");
-            }
+		public async Task Handle(DeleteDentalStudioServiceByIdCommand request, CancellationToken cancellationToken)
+		{
+			var currentUser = _userContext.GetCurrentUser();
+			if (currentUser == null)
+			{
+				throw new InvalidOperationException("Context user is not present.");
+			}
 
-            if (!(userContext.IsInRole("Moderator") || userContext.Id == request.Id.ToString()))
-            {
-                throw new InvalidOperationException("You are not authorized to delete this service.");
-            }
+			var service = await _repository.GetServiceById(request.Id);
+			if (service == null)
+			{
+				throw new KeyNotFoundException($"Dental studio service with ID {request.Id} does not exist.");
+			}
 
-            var service = await _repository.GetServiceById(request.Id);
-            if (service == null)
-            {
-                throw new KeyNotFoundException($"Dental studio service with ID {request.Id} does not exist.");
-            }
+			var isAuthorized = currentUser.IsInRole("Moderator") ||
+							   service.DentalStudio?.CreatedById == currentUser.Id;
 
-            await _repository.DeleteDentalStudioService(request.Id);
-        }
-    }
+			if (!isAuthorized)
+			{
+				throw new UnauthorizedAccessException("You are not authorized to delete this service.");
+			}
+
+			await _repository.DeleteDentalStudioService(request.Id);
+		}
+	}
 }

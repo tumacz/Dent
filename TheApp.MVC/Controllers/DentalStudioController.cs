@@ -67,7 +67,6 @@ namespace TheApp.MVC.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            // TODO(macio): separate DTO for read and push
             var id = await _mediator.Send(command);
 
             return Ok(new { message = $"Created Dental Studio: {id}" });

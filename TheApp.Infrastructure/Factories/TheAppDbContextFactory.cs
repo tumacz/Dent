@@ -1,47 +1,34 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using TheApp.Infrastructure.Persistence;
 
 public class TheAppDbContextFactory : IDesignTimeDbContextFactory<TheAppDbContext>
 {
-    public TheAppDbContext CreateDbContext(string[] args)
-    {
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+	public TheAppDbContext CreateDbContext(string[] args)
+	{
+		var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
-        var basePathCandidates = new[]
-        {
-            Path.Combine(Directory.GetCurrentDirectory(), "../TheApp.MVC"),
-            Path.Combine(Directory.GetCurrentDirectory(), "../TheApp.Infrastructure"),
-            Path.Combine(Directory.GetCurrentDirectory(), "../../TheApp.MVC")
-        };
+		var basePath = Path.Combine(Directory.GetCurrentDirectory(), "../TheApp.MVC");
 
-        string? foundPath = basePathCandidates
-            .FirstOrDefault(path => File.Exists(Path.Combine(path, "appsettings.json")));
+		Console.WriteLine($"🔧 Ładowanie appsettings.json z: {basePath} ({environment})");
 
-        if (foundPath == null)
-        {
-            throw new FileNotFoundException("❌ Nie znaleziono appsettings.json.");
-        }
+		var configuration = new ConfigurationBuilder()
+			.SetBasePath(basePath)
+			.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+			.AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
+			.Build();
 
-        Console.WriteLine($"🔧 Ładowanie appsettings.json z: {foundPath} ({environment})");
+		var connectionString = configuration.GetConnectionString("TheAppCS");
 
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(foundPath)
-            .AddJsonFile("appsettings.json", optional: false)
-            .AddJsonFile($"appsettings.{environment}.json", optional: true)
-            .Build();
+		if (string.IsNullOrWhiteSpace(connectionString))
+		{
+			throw new InvalidOperationException("❌ Brakuje connection stringa 'TheAppCS' w plikach konfiguracyjnych.");
+		}
 
-        var connectionString = configuration.GetConnectionString("TheAppCS");
+		var optionsBuilder = new DbContextOptionsBuilder<TheAppDbContext>();
+		optionsBuilder.UseSqlServer(connectionString);
 
-        if (string.IsNullOrWhiteSpace(connectionString))
-        {
-            throw new InvalidOperationException($"❌ Brakuje connection stringa 'TheAppCS' w appsettings.{environment}.json lub appsettings.json.");
-        }
-
-        var optionsBuilder = new DbContextOptionsBuilder<TheAppDbContext>();
-        optionsBuilder.UseSqlServer(connectionString);
-
-        return new TheAppDbContext(optionsBuilder.Options);
-    }
+		return new TheAppDbContext(optionsBuilder.Options);
+	}
 }

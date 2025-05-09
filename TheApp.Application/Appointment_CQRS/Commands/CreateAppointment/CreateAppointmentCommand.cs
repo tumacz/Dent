@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TheApp.Application.Appointment_CQRS.Commands;
 
 namespace TheApp.Application.AppointmentDTO.Commands.CreateAppointment
 {

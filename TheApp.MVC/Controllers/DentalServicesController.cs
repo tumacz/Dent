@@ -2,9 +2,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TheApp.Application.DentalStudioService_CQRS.Queries.GetServiceById;
+using TheApp.Application.DentalStudioService_CQRS.Queries.GetServiceForEncodedName;
 using TheApp.Application.DentalStudioServiceDTO.Commands.CreateService;
 using TheApp.Application.DentalStudioServiceDTO.Commands.DeleteService;
-using TheApp.Application.DentalStudioServiceDTO.Queries;
+using TheApp.Application.DentalStudioServiceDTO.Commands.EditService;
 
 namespace TheApp.MVC.Controllers
 {
@@ -53,5 +55,18 @@ namespace TheApp.MVC.Controllers
             await _mediator.Send(new DeleteDentalStudioServiceByIdCommand() { Id = id });
             return Ok();
         }
-    }
+
+		[Authorize]
+		[HttpPut("{id}")]
+		public async Task<IActionResult> Edit(int id, [FromBody] EditDentalStudioServiceCommand command)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			command.Id = id;
+			await _mediator.Send(command);
+			return NoContent();
+		}
+
+	}
 }
